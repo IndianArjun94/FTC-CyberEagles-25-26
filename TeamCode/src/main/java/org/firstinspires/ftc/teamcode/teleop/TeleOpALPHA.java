@@ -56,6 +56,7 @@ public class TeleOpALPHA extends OpMode {
 
     @Override
     public void loop() {
+
         double gamepad1_y = gamepad1.left_stick_y;
         double gamepad1_x = gamepad1.left_stick_x;
         double gamepad1_x2 = gamepad1.right_stick_x;

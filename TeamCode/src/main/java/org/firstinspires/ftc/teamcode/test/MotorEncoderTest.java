@@ -26,19 +26,48 @@ public class MotorEncoderTest extends OpMode {
     @Override
     public void loop() {
 
-        if (gamepad1.x) {
-            leftBackMotor.setPower(gamepad1.left_trigger);
-        } if (gamepad1.b) {
-            rightBackMotor.setPower(gamepad1.left_trigger);
-        } if (gamepad1.y) {
-            leftFrontMotor.setPower(gamepad1.left_trigger);
-        } if (gamepad1.a) {
-            rightFrontMotor.setPower(gamepad1.left_trigger);
+        double startTime = System.nanoTime();
+
+        double startPosLeftBack = leftBackMotor.getCurrentPosition();
+        double startPosRightBack = rightBackMotor.getCurrentPosition();
+        double startPosLeftFront = leftFrontMotor.getCurrentPosition();
+        double startPosRightFront = rightFrontMotor.getCurrentPosition();
+
+//        if (gamepad1.x) {
+            leftBackMotor.setPower(gamepad1.left_trigger/3);
+//        } if (gamepad1.b) {
+            rightBackMotor.setPower(gamepad1.left_trigger/3);
+//        } if (gamepad1.y) {
+            leftFrontMotor.setPower(gamepad1.left_trigger/3);
+//        } if (gamepad1.a) {
+            rightFrontMotor.setPower(gamepad1.left_trigger/3);
+//        }
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
-        telemetry.addData("Front Left: ", leftFrontMotor.getCurrentPosition());
-        telemetry.addData("Front Right: ", rightFrontMotor.getCurrentPosition());
-        telemetry.addData("Back Left: ", leftBackMotor.getCurrentPosition());
-        telemetry.addData("Back Right: ", rightBackMotor.getCurrentPosition());
+        double endTime = System.nanoTime();
+
+        double endPosLeftBack = leftBackMotor.getCurrentPosition();
+        double endPosRightBack = rightBackMotor.getCurrentPosition();
+        double endPosLeftFront = leftFrontMotor.getCurrentPosition();
+        double endPosRightFront = rightFrontMotor.getCurrentPosition();
+
+//        --------
+
+        double timeDiff = endTime-startTime;
+
+        double diffPosLeftBack = endPosLeftBack-startPosLeftBack;
+        double diffPosRightBack = endPosRightBack-startPosRightBack;
+        double diffPosLeftFront = endPosLeftFront-startPosLeftFront;
+        double diffPosRightFront = endPosRightFront-startPosRightFront;
+
+        telemetry.addData("Front Left: ", Double.toString(diffPosLeftFront/timeDiff));
+        telemetry.addData("Front Right: ", Double.toString(diffPosRightFront/timeDiff));
+        telemetry.addData("Back Left: ", Double.toString(diffPosLeftBack/timeDiff));
+        telemetry.addData("Back Right: ", Double.toString(diffPosRightBack/timeDiff));
     }
 }
