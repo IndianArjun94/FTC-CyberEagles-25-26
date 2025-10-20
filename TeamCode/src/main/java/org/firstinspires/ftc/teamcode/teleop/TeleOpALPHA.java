@@ -17,10 +17,10 @@ public class TeleOpALPHA extends OpMode {
     private static DcMotor leftBackMotor;
     private static DcMotor rightBackMotor;
 
-    private static double leftFrontSpeed;
-    private static double leftBackSpeed;
-    private static double rightFrontSpeed;
-    private static double rightBackSpeed;
+    private static double frontLeftPower;
+    private static double backLeftPower;
+    private static double frontRightPower;
+    private static double backRightPower;
 
     private static final double DRIVETRAIN_MULTIPLIER = 0.5f;
 
@@ -57,41 +57,31 @@ public class TeleOpALPHA extends OpMode {
 
     //  Update Function that runs after every loop  //
     public static void updateDrivetrainPower() {
-        leftFrontMotor.setPower(leftFrontSpeed * DRIVETRAIN_MULTIPLIER);
-        leftBackMotor.setPower(leftBackSpeed * DRIVETRAIN_MULTIPLIER);
-        rightBackMotor.setPower(rightBackSpeed * DRIVETRAIN_MULTIPLIER);
-        rightFrontMotor.setPower(rightFrontSpeed * DRIVETRAIN_MULTIPLIER);
+        leftFrontMotor.setPower(frontLeftPower * DRIVETRAIN_MULTIPLIER);
+        leftBackMotor.setPower(backLeftPower * DRIVETRAIN_MULTIPLIER);
+        rightBackMotor.setPower(backRightPower * DRIVETRAIN_MULTIPLIER);
+        rightFrontMotor.setPower(frontRightPower * DRIVETRAIN_MULTIPLIER);
     }
 
     @Override
     public void loop() {
 
-        double gamepad1_y = gamepad1.left_stick_y;
-        double gamepad1_x = gamepad1.left_stick_x;
-        double gamepad1_x2 = gamepad1.right_stick_x;
+        double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
+        double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+        double rx = gamepad1.right_stick_x;
 
-        leftFrontSpeed = 0;
-        rightFrontSpeed = 0;
-        leftBackSpeed = 0;
-        rightBackSpeed = 0;
+        // Denominator is the largest motor power (absolute value) or 1
+        // This ensures all the powers maintain the same ratio,
+        // but only if at least one is out of the range [-1, 1]
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        frontLeftPower = (y + x + rx) / denominator;
+        backLeftPower = (y - x + rx) / denominator;
+        frontRightPower = (y - x - rx) / denominator;
+        backRightPower = (y + x - rx) / denominator;
 
-//       Rotate
-        leftBackSpeed -= gamepad1_x2;
-        leftFrontSpeed -= gamepad1_x2;
-        rightFrontSpeed += gamepad1_x2;
-        rightBackSpeed += gamepad1_x2;
 
-//       Forward/Backward
-        leftFrontSpeed += gamepad1_y;
-        leftBackSpeed += gamepad1_y;
-        rightFrontSpeed += gamepad1_y;
-        rightBackSpeed += gamepad1_y;
 
-//       Lateral
-        rightFrontSpeed -= gamepad1_x;
-        leftBackSpeed -= gamepad1_x;
-        rightBackSpeed += gamepad1_x;
-        leftFrontSpeed += gamepad1_x;
+
 
 //        Loading
         if (gamepad1.a) {
