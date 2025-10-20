@@ -104,7 +104,7 @@ public class TeleOpALPHA extends OpMode {
 
         // Modes to control power
         if (gamepad1.dpadUpWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = .8;
+            SHOOTING_WHEEL_MULTIPLIER = .80;
             MODE = "Four";
         }
         if (gamepad1.dpadRightWasPressed()) {
