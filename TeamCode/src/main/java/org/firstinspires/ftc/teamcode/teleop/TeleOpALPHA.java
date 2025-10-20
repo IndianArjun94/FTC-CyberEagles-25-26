@@ -104,19 +104,19 @@ public class TeleOpALPHA extends OpMode {
 
         // Modes to control power
         if (gamepad1.dpadUpWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = 1;
+            SHOOTING_WHEEL_MULTIPLIER = .8;
             MODE = "Four";
         }
         if (gamepad1.dpadRightWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = .75;
+            SHOOTING_WHEEL_MULTIPLIER = .70;
             MODE = "Three";
         }
         if (gamepad1.dpadDownWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = .50;
+            SHOOTING_WHEEL_MULTIPLIER = .60;
             MODE = "Two";
         }
         if (gamepad1.dpadLeftWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = .25;
+            SHOOTING_WHEEL_MULTIPLIER = .50;
             MODE = "One";
         }
         telemetry.addData("Launcher Mode: ", MODE);
