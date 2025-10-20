@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -15,19 +16,18 @@ public class TeleOpALPHA extends OpMode {
     private static DcMotor rightFrontMotor;
     private static DcMotor leftBackMotor;
     private static DcMotor rightBackMotor;
-//    private static DcMotor armMotor;
 
     private static double leftFrontSpeed;
     private static double leftBackSpeed;
     private static double rightFrontSpeed;
     private static double rightBackSpeed;
 
-    private final static double DRIVETRAIN_MULTIPLIER = 0.5f;
-//    private static int armPos = armMotor.getCurrentPosition();
-    private static int ARM_MAX = 100000;
-    private static int ARM_MIN = -100000;
-    private static boolean IS_ARM_LOCKED = false;
-    private static boolean IS_ARM_UP = false;
+    private static final double DRIVETRAIN_MULTIPLIER = 0.5f;
+
+    private static boolean loading = false;
+    private static CRServo leftLoadServo;
+    private static CRServo rightLoadServo;
+    private static DcMotor launcherMotor;
 
     @Override
     public void init() {
@@ -35,11 +35,18 @@ public class TeleOpALPHA extends OpMode {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFront");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBack");
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBack");
-//        armMotor = hardwareMap.get(DcMotor.class, "armMotor");
 
-        rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-//        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftLoadServo = hardwareMap.get(CRServo.class, "leftLoad");
+        rightLoadServo = hardwareMap.get(CRServo.class, "rightLoad");
+
+        launcherMotor = hardwareMap.get(DcMotor.class, "launcher");
+
+        leftLoadServo.setDirection(DcMotorSimple.Direction.REVERSE);
+
+//        launcherMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         AprilTagModule.init(hardwareMap, true);
 
@@ -66,8 +73,6 @@ public class TeleOpALPHA extends OpMode {
         leftBackSpeed = 0;
         rightBackSpeed = 0;
 
-//        ALL CODE GOES HERE!!!!
-
 //       Rotate
         leftBackSpeed -= gamepad1_x2;
         leftFrontSpeed -= gamepad1_x2;
@@ -86,6 +91,28 @@ public class TeleOpALPHA extends OpMode {
         rightFrontSpeed += gamepad1_x;
         rightBackSpeed -= gamepad1_x;
 
+//        Loading
+        if (gamepad1.a) {
+            loading = true;
+        } else if (gamepad1.b) {
+            loading = false;
+        }
+
+        if (loading) {
+            rightLoadServo.setPower(1);
+            leftLoadServo.setPower(1);
+        } else {
+            rightLoadServo.setPower(0);
+            leftLoadServo.setPower(0);
+        }
+
+//        Launching
+        if (gamepad1.right_trigger > 0.05) {
+            launcherMotor.setPower(gamepad1.right_trigger);
+        } else {
+            launcherMotor.setPower(0);
+        }
+
         ObeliskPattern obeliskPattern = AprilTagModule.instance.getObeliskPattern();
 
         if (obeliskPattern == ObeliskPattern.GPP) {
@@ -102,37 +129,6 @@ public class TeleOpALPHA extends OpMode {
 
         telemetry.update();
 
-//      Arm code        //
-//        if(gamepad1.y){
-//            if(!IS_ARM_UP){
-//                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                armMotor.setTargetPosition(ARM_MAX);
-//                armMotor.setPower(.5f);
-//            }
-//            IS_ARM_UP = true;
-//            IS_ARM_LOCKED = false;
-//        } else if (gamepad1.a) {
-//            if(IS_ARM_UP || IS_ARM_LOCKED){
-//                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                armMotor.setTargetPosition(ARM_MIN);
-//                armMotor.setPower(.5f);
-//            }
-//            IS_ARM_LOCKED = false;
-//            IS_ARM_UP = false;
-//        } else {
-//            if (IS_ARM_UP || !IS_ARM_LOCKED) {
-//                armPos = armMotor.getCurrentPosition();
-//                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                armMotor.setTargetPosition(armPos);
-//                armMotor.setPower(.5f);
-//            }
-//
-//            IS_ARM_LOCKED = true;
-//            IS_ARM_UP = false;
-//        }
-//
-//        telemetry.addData("Arm Pos: ", armPos);
-//        telemetry.update();
 //        Update Drivetrain Power
         updateDrivetrainPower();
     }
