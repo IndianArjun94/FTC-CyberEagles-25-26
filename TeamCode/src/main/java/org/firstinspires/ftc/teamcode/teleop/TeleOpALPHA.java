@@ -47,7 +47,9 @@ public class TeleOpALPHA extends OpMode {
 //        launcherMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         AprilTagModule.init(hardwareMap, true);
 
@@ -75,8 +77,6 @@ public class TeleOpALPHA extends OpMode {
         boolean isOnePower = false;
         String mode = null;
 
-
-
         leftFrontSpeed = 0;
         rightFrontSpeed = 0;
         leftBackSpeed = 0;
@@ -95,10 +95,10 @@ public class TeleOpALPHA extends OpMode {
         rightBackSpeed += gamepad1_y;
 
 //       Lateral
-        leftFrontSpeed -= gamepad1_x;
-        leftBackSpeed += gamepad1_x;
-        rightFrontSpeed += gamepad1_x;
-        rightBackSpeed -= gamepad1_x;
+        rightFrontSpeed -= gamepad1_x;
+        leftBackSpeed -= gamepad1_x;
+        rightBackSpeed += gamepad1_x;
+        leftFrontSpeed += gamepad1_x;
 
 //        Loading
         if (gamepad1.a) {
