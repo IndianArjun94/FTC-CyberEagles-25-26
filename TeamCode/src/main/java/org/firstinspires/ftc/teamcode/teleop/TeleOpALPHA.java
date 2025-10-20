@@ -30,6 +30,8 @@ public class TeleOpALPHA extends OpMode {
     private static CRServo rightLoadServo;
     private static DcMotor launcherMotor;
 
+    private static String MODE = null;
+
     @Override
     public void init() {
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFront");
@@ -50,6 +52,8 @@ public class TeleOpALPHA extends OpMode {
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         AprilTagModule.init(hardwareMap, true);
 
@@ -81,11 +85,6 @@ public class TeleOpALPHA extends OpMode {
         backRightPower = (y + x - rx) / denominator;
 
 
-        boolean isFourPower = false;
-        boolean isThreePower = false;
-        boolean isTwoPower = false;
-        boolean isOnePower = false;
-        String mode = null;
 
 
 
@@ -106,46 +105,24 @@ public class TeleOpALPHA extends OpMode {
 
         // Modes to control power
         if (gamepad1.dpadUpWasPressed()) {
-            isFourPower = true;
-            isThreePower = false;
-            isOnePower = false;
-            isTwoPower = false;
-            mode = "Four";
+            SHOOTING_WHEEL_MULTIPLIER = 1;
+            MODE = "Four";
         }
         if (gamepad1.dpadRightWasPressed()) {
-            isThreePower = true;
-            isFourPower = false;
-            isOnePower = false;
-            isTwoPower = false;
-            mode = "Three";
-        }
-
-        if (gamepad1.dpadLeftWasPressed()) {
-            isOnePower = true;
-            isTwoPower = false;
-            isThreePower = false;
-            isFourPower = false;
-            mode = "One";
+            SHOOTING_WHEEL_MULTIPLIER = .75;
+            MODE = "Three";
         }
         if (gamepad1.dpadDownWasPressed()) {
-            isOnePower = false;
-            isFourPower = false;
-            isThreePower = false;
-            isTwoPower = true;
-            mode = "Two";
-        }
-        if (isFourPower) {
-            SHOOTING_WHEEL_MULTIPLIER = 1;
-        }
-        if (isThreePower) {
-            SHOOTING_WHEEL_MULTIPLIER = .75;
-        }
-        if (isTwoPower) {
             SHOOTING_WHEEL_MULTIPLIER = .50;
+            MODE = "Two";
         }
-        if (isOnePower) {
+        if (gamepad1.dpadLeftWasPressed()) {
             SHOOTING_WHEEL_MULTIPLIER = .25;
+            MODE = "One";
         }
+        telemetry.addData("Launcher Mode: ", MODE);
+
+
 //        Launching
         if (gamepad1.right_trigger > 0.05) {
             launcherMotor.setPower(gamepad1.right_trigger*0.5);
