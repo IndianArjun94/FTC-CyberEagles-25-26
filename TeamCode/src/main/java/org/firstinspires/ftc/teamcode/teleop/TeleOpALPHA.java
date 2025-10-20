@@ -88,7 +88,6 @@ public class TeleOpALPHA extends OpMode {
         String mode = null;
 
 
-
 //        Loading
         if (gamepad1.a) {
             loading = true;
@@ -148,7 +147,7 @@ public class TeleOpALPHA extends OpMode {
         }
 //        Launching
         if (gamepad1.right_trigger > 0.05) {
-            launcherMotor.setPower(gamepad1.right_trigger*0.5);
+            launcherMotor.setPower(gamepad1.right_trigger * SHOOTING_WHEEL_MULTIPLIER);
         } else {
             launcherMotor.setPower(0);
         }
