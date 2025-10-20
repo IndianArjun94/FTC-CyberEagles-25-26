@@ -23,6 +23,7 @@ public class TeleOpALPHA extends OpMode {
     private static double rightBackSpeed;
 
     private static final double DRIVETRAIN_MULTIPLIER = 0.5f;
+    private static double SHOOTING_WHEEL_MULTIPLIER = 1;
 
     private static boolean loading = false;
     private static CRServo leftLoadServo;
@@ -68,6 +69,14 @@ public class TeleOpALPHA extends OpMode {
         double gamepad1_x = gamepad1.left_stick_x;
         double gamepad1_x2 = gamepad1.right_stick_x;
 
+        boolean isFourPower = false;
+        boolean isThreePower = false;
+        boolean isTwoPower = false;
+        boolean isOnePower = false;
+        String mode = null;
+
+
+
         leftFrontSpeed = 0;
         rightFrontSpeed = 0;
         leftBackSpeed = 0;
@@ -106,9 +115,51 @@ public class TeleOpALPHA extends OpMode {
             leftLoadServo.setPower(0);
         }
 
+        // Modes to control power
+        if (gamepad1.dpadUpWasPressed()) {
+            isFourPower = true;
+            isThreePower = false;
+            isOnePower = false;
+            isTwoPower = false;
+            mode = "Four";
+        }
+        if (gamepad1.dpadRightWasPressed()) {
+            isThreePower = true;
+            isFourPower = false;
+            isOnePower = false;
+            isTwoPower = false;
+            mode = "Three";
+        }
+
+        if (gamepad1.dpadLeftWasPressed()) {
+            isOnePower = true;
+            isTwoPower = false;
+            isThreePower = false;
+            isFourPower = false;
+            mode = "One";
+        }
+        if (gamepad1.dpadDownWasPressed()) {
+            isOnePower = false;
+            isFourPower = false;
+            isThreePower = false;
+            isTwoPower = true;
+            mode = "Two";
+        }
+        if (isFourPower) {
+            SHOOTING_WHEEL_MULTIPLIER = 1;
+        }
+        if (isThreePower) {
+            SHOOTING_WHEEL_MULTIPLIER = .75;
+        }
+        if (isTwoPower) {
+            SHOOTING_WHEEL_MULTIPLIER = .50;
+        }
+        if (isOnePower) {
+            SHOOTING_WHEEL_MULTIPLIER = .25;
+        }
 //        Launching
         if (gamepad1.right_trigger > 0.05) {
-            launcherMotor.setPower(gamepad1.right_trigger);
+            launcherMotor.setPower(gamepad1.right_trigger * SHOOTING_WHEEL_MULTIPLIER);
         } else {
             launcherMotor.setPower(0);
         }
@@ -126,7 +177,7 @@ public class TeleOpALPHA extends OpMode {
         } else if (obeliskPattern == ObeliskPattern.MULTIPLE_DETECTED) {
             telemetry.addData("Pattern: ", "multiple");
         }
-
+        telemetry.addData("Wheel mode: ", mode);
         telemetry.update();
 
 //        Update Drivetrain Power
