@@ -23,14 +23,15 @@ public class TeleOpALPHA extends OpMode {
     private static double backRightPower;
 
     private static final double DRIVETRAIN_MULTIPLIER = 0.5f;
-    private static double SHOOTING_WHEEL_MULTIPLIER = 1;
+    private static final double LAUNCHER_MIN = 0.5f;
+    private static double SHOOTING_WHEEL_MULTIPLIER = 0.05f;
 
     private static boolean loading = false;
     private static CRServo leftLoadServo;
     private static CRServo rightLoadServo;
     private static DcMotor launcherMotor;
 
-    private static String MODE = null;
+    private static String MODE = "One";
 
     @Override
     public void init() {
@@ -103,28 +104,29 @@ public class TeleOpALPHA extends OpMode {
         }
 
         // Modes to control power
-        if (gamepad1.dpadUpWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = .80;
-            MODE = "Four";
-        }
+//        if (gamepad1.dpadUpWasPressed()) {
+//            SHOOTING_WHEEL_MULTIPLIER = 0.3;
+//            MODE = "Four";
+//        }
         if (gamepad1.dpadRightWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = .70;
+            SHOOTING_WHEEL_MULTIPLIER = 0.3;
             MODE = "Three";
         }
         if (gamepad1.dpadDownWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = .60;
+            SHOOTING_WHEEL_MULTIPLIER = 0.1;
             MODE = "Two";
         }
         if (gamepad1.dpadLeftWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = .50;
+            SHOOTING_WHEEL_MULTIPLIER = 0.05;
             MODE = "One";
         }
         telemetry.addData("Launcher Mode: ", MODE);
+        telemetry.addData("Launcher Speed Target: ", LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*gamepad1.right_trigger));
 
 
 //        Launching
         if (gamepad1.right_trigger > 0.05) {
-            launcherMotor.setPower(gamepad1.right_trigger * SHOOTING_WHEEL_MULTIPLIER);
+            launcherMotor.setPower(LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*gamepad1.right_trigger));
         } else {
             launcherMotor.setPower(0);
         }
