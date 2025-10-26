@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode.test;
+package org.firstinspires.ftc.teamcode.diagnostic;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name = "Motor Encoder Test")
-public class MotorEncoderTest extends OpMode {
+@TeleOp(name = "Motor Encoder Diagnostic", group = "Diagnostic")
+public class MotorEncoderDiagnostic extends OpMode {
     private static DcMotor leftFrontMotor;
     private static DcMotor rightFrontMotor;
     private static DcMotor leftBackMotor;

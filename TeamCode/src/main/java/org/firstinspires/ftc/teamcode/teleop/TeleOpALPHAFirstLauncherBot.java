@@ -9,27 +9,30 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.module.AprilTagModule;
 import org.firstinspires.ftc.teamcode.module.ObeliskPattern;
 
-@TeleOp(name = "TeleOpALPHA")
-public class TeleOpALPHA extends OpMode {
+@TeleOp(name = "TeleOpBeta")
+public class TeleOpALPHAFirstLauncherBot extends OpMode {
 
     private static DcMotor leftFrontMotor;
     private static DcMotor rightFrontMotor;
     private static DcMotor leftBackMotor;
     private static DcMotor rightBackMotor;
 
-    private static double frontLeftPower;
-    private static double backLeftPower;
-    private static double frontRightPower;
-    private static double backRightPower;
+    private static double leftFrontPower;
+    private static double leftBackPower;
+    private static double rightFrontPower;
+    private static double rightBackPower;
 
-    private static final double DRIVETRAIN_MULTIPLIER = 0.5f;
+    private static final double SPEED_CAP = 0.5f;
     private static final double LAUNCHER_MIN = 0.5f;
     private static double SHOOTING_WHEEL_MULTIPLIER = 0.05f;
 
     private static boolean loading = false;
+    private static boolean intakeActive = false;
     private static CRServo leftLoadServo;
     private static CRServo rightLoadServo;
     private static DcMotor launcherMotor;
+    private static DcMotor intakeMotor;
+    private static double previousIntakeUpdateTime = System.currentTimeMillis();
 
     private static String MODE = "One";
 
@@ -39,20 +42,15 @@ public class TeleOpALPHA extends OpMode {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFront");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBack");
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBack");
+        intakeMotor = hardwareMap.get(DcMotor.class, "intake");
 
         leftLoadServo = hardwareMap.get(CRServo.class, "leftLoad");
         rightLoadServo = hardwareMap.get(CRServo.class, "rightLoad");
 
         launcherMotor = hardwareMap.get(DcMotor.class, "launcher");
-
         leftLoadServo.setDirection(DcMotorSimple.Direction.REVERSE);
 
-//        launcherMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -63,29 +61,41 @@ public class TeleOpALPHA extends OpMode {
 
     //  Update Function that runs after every loop  //
     public static void updateDrivetrainPower() {
-        leftFrontMotor.setPower(frontLeftPower * DRIVETRAIN_MULTIPLIER);
-        leftBackMotor.setPower(backLeftPower * DRIVETRAIN_MULTIPLIER);
-        rightBackMotor.setPower(backRightPower * DRIVETRAIN_MULTIPLIER);
-        rightFrontMotor.setPower(frontRightPower * DRIVETRAIN_MULTIPLIER);
+        leftFrontMotor.setPower(leftFrontPower * SPEED_CAP);
+        leftBackMotor.setPower(leftBackPower * SPEED_CAP);
+        rightBackMotor.setPower(rightBackPower * SPEED_CAP);
+        rightFrontMotor.setPower(rightFrontPower * SPEED_CAP);
     }
 
     @Override
     public void loop() {
 
-        double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-        double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
-        double rx = gamepad1.right_stick_x;
+        leftFrontPower = 0;
+        rightFrontPower = 0;
+        leftBackPower = 0;
+        rightBackPower = 0;
 
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio,
-        // but only if at least one is out of the range [-1, 1]
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        frontLeftPower = (y + x + rx) / denominator;
-        backLeftPower = (y - x + rx) / denominator;
-        frontRightPower = (y - x - rx) / denominator;
-        backRightPower = (y + x - rx) / denominator;
+        double gamepad1_x2 = gamepad1.right_stick_x;
+        double gamepad1_y = -gamepad1.left_stick_y;
+        double gamepad1_x = -gamepad1.left_stick_x;
 
+        //Rotation
+        leftBackPower += gamepad1_x2;
+        leftFrontPower += gamepad1_x2;
+        rightFrontPower -= gamepad1_x2;
+        rightBackPower -= gamepad1_x2;
 
+        //Forward/Backward
+        leftFrontPower += gamepad1_y;
+        leftBackPower += gamepad1_y;
+        rightFrontPower += gamepad1_y;
+        rightBackPower += gamepad1_y;
+
+        //Lateral
+        leftFrontPower -= gamepad1_x;
+        leftBackPower += gamepad1_x;
+        rightFrontPower -= gamepad1_x;
+        rightBackPower += gamepad1_x;
 
 
 //        Loading
@@ -103,11 +113,24 @@ public class TeleOpALPHA extends OpMode {
             leftLoadServo.setPower(0);
         }
 
+//        Intake
+        if (gamepad1.left_bumper && System.currentTimeMillis()-previousIntakeUpdateTime > 250) {
+            if (intakeActive) {
+                intakeActive = false;
+                previousIntakeUpdateTime = System.currentTimeMillis();
+            } else {
+                intakeActive = true;
+                previousIntakeUpdateTime = System.currentTimeMillis();
+            }
+        }
+
+        if (intakeActive) {
+            intakeMotor.setPower(1);
+        } else {
+            intakeMotor.setPower(0);
+        }
+
         // Modes to control power
-//        if (gamepad1.dpadUpWasPressed()) {
-//            SHOOTING_WHEEL_MULTIPLIER = 0.3;
-//            MODE = "Four";
-//        }
         if (gamepad1.dpadRightWasPressed()) {
             SHOOTING_WHEEL_MULTIPLIER = 0.3;
             MODE = "Three";

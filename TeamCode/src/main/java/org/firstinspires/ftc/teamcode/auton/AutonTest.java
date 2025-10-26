@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.auton;
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -10,13 +7,9 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.action.Intake;
-import org.firstinspires.ftc.teamcode.auton.action.OldIntake;
+import org.firstinspires.ftc.teamcode.auton.action.intake.Intake;
 
 @Autonomous(name = "67 autonomous")
 public class AutonTest extends LinearOpMode {
@@ -25,10 +18,6 @@ public class AutonTest extends LinearOpMode {
 
     public static double calculateOffsetDegrees(double degrees) {
          return degrees+(degrees*DEGREES_OFFSET);
-    }
-
-    public static double deg(double degrees) {
-        return Math.toRadians(calculateOffsetDegrees(degrees));
     }
 
     @Override
