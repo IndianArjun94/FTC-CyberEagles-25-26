@@ -35,7 +35,7 @@ public class LauncherBotAutonTest extends LinearOpMode {
                 intake.stopActiveIntake(), // stop intake
                 launcher.startLauncher(LauncherPower.LOW), // start revving launcher at low power
                 loader.startSingleBallLoader(), // start active loader
-                new SleepAction(4000), // wait 4 seconds
+                new SleepAction(4), // wait 4 seconds
                 loader.stopSingleBallLoader(), // stop loader
                 launcher.stopLauncher() // stop launcher
         );
