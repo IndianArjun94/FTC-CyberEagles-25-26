@@ -30,7 +30,7 @@ public class LauncherBotAutonTest extends LinearOpMode {
         Action action = new SequentialAction(
                 intake.startActiveIntake(), // start intake
                 drive.actionBuilder(initialPose) // go forward
-                        .lineToY(20)
+                        .lineToY(20) //units - inches
                         .build(),
                 intake.stopActiveIntake(), // stop intake
                 launcher.startLauncher(LauncherPower.LOW), // start revving launcher at low power
