@@ -61,6 +61,8 @@ public class TeleOpALPHAFirstLauncherBot extends OpMode {
 
         launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        intakeMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
+
         AprilTagModule.init(hardwareMap, true);
 
     }
