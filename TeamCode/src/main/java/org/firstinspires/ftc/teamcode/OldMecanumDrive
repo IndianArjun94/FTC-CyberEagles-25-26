@@ -52,7 +52,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Config
-public final class FirstLauncherBotMecanumDrive {
+public final class MecanumDrive {
     public static class Params {
         // IMU orientation
         // TODO: fill in these values based on
@@ -63,14 +63,14 @@ public final class FirstLauncherBotMecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
 
         // drive model parameters
-        public double inPerTick = 0.024;
+        public double inPerTick = 0.02272488;
         public double lateralInPerTick = inPerTick;
-        public double trackWidthTicks = 1264.811153162408;
+        public double trackWidthTicks = 647.8497752442253;
 
         // feedforward parameters (in tick units)
-        public double kS = 1.0675763925160364;
-        public double kV = 0.004322224635295528;
-        public double kA = 0.0013;
+        public double kS = 0.6996738627343229;
+        public double kV = 0.0042751787441955525;
+        public double kA = 0.0008;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -82,9 +82,9 @@ public final class FirstLauncherBotMecanumDrive {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 2.5;
-        public double lateralGain = 3;
-        public double headingGain = 1.5; // shared with turn
+        public double axialGain = 2.0;
+        public double lateralGain = 4.0;
+        public double headingGain = 4.0; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
@@ -130,18 +130,15 @@ public final class FirstLauncherBotMecanumDrive {
         private Pose2d pose;
 
         public DriveLocalizer(Pose2d pose) {
-            leftFront = new OverflowEncoder(new RawEncoder(FirstLauncherBotMecanumDrive.this.leftFront));
-            leftBack = new OverflowEncoder(new RawEncoder(FirstLauncherBotMecanumDrive.this.leftBack));
-            rightBack = new OverflowEncoder(new RawEncoder(FirstLauncherBotMecanumDrive.this.rightBack));
-            rightFront = new OverflowEncoder(new RawEncoder(FirstLauncherBotMecanumDrive.this.rightFront));
+            leftFront = new OverflowEncoder(new RawEncoder(MecanumDrive.this.leftFront));
+            leftBack = new OverflowEncoder(new RawEncoder(MecanumDrive.this.leftBack));
+            rightBack = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightBack));
+            rightFront = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightFront));
 
             imu = lazyImu.get();
 
             // TODO: reverse encoders if needed
-            //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-
             rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-            rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
             this.pose = pose;
         }
@@ -219,7 +216,7 @@ public final class FirstLauncherBotMecanumDrive {
         }
     }
 
-    public FirstLauncherBotMecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
+    public MecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
         LynxFirmware.throwIfModulesAreOutdated(hardwareMap);
 
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
@@ -240,6 +237,7 @@ public final class FirstLauncherBotMecanumDrive {
 
         // TODO: reverse motor directions if needed
         //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // TODO: make sure your config has an IMU with this name (can be BNO or BHI)
@@ -455,14 +453,14 @@ public final class FirstLauncherBotMecanumDrive {
     public PoseVelocity2d updatePoseEstimate() {
         PoseVelocity2d vel = localizer.update();
         poseHistory.add(localizer.getPose());
-        
+
         while (poseHistory.size() > 100) {
             poseHistory.removeFirst();
         }
 
         estimatedPoseWriter.write(new PoseMessage(localizer.getPose()));
-        
-        
+
+
         return vel;
     }
 
