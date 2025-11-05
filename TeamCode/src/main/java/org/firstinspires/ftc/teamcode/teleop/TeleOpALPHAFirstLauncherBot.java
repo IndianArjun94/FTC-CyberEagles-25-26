@@ -22,11 +22,10 @@ public class  TeleOpALPHAFirstLauncherBot extends OpMode {
     private static double rightFrontPower;
     private static double rightBackPower;
 
-    private static final double SPEED_CAP = 1f;
+    private static final double SPEED_CAP = 0.8f;
     private static final double LAUNCHER_MIN = 0.5f;
-    private static double SHOOTING_WHEEL_MULTIPLIER = 0.05f;
-
-    private static boolean loading = false;
+    private static double SHOOTING_WHEEL_MULTIPLIER = 0.18f;
+    private static double launcherPowerBoost = 0.0;
     private static boolean intakeActive = false;
     private static CRServo leftLoadServo;
     private static CRServo rightLoadServo;
@@ -34,13 +33,14 @@ public class  TeleOpALPHAFirstLauncherBot extends OpMode {
     private static DcMotor intakeMotor1;
     private static DcMotor intakeMotor2;
     private static double previousIntakeUpdateTime = System.currentTimeMillis();
-
-    private static String MODE = "One";
-
+    private static String MODE = "Regular Power";
     private static boolean launcherSequenceStarted = false;
     private static long launcherSequenceStartTime;
     private static boolean launcherSequenceLaunched = false;
     private static long launcherSequenceLaunchTime;
+    private static boolean yJustPressed = false;
+    private static boolean aJustPressed = false;
+    private static long intakeStopTime;
 
     @Override
     public void init() {
@@ -107,7 +107,7 @@ public class  TeleOpALPHAFirstLauncherBot extends OpMode {
         rightBackPower -= gamepad1_x;
 
 //        Intake
-        if (gamepad2.left_bumper && System.currentTimeMillis()-previousIntakeUpdateTime > 250) {
+        if (gamepad1.left_bumper && System.currentTimeMillis()-previousIntakeUpdateTime > 250) {
             if (intakeActive) {
                 intakeActive = false;
                 previousIntakeUpdateTime = System.currentTimeMillis();
@@ -119,28 +119,25 @@ public class  TeleOpALPHAFirstLauncherBot extends OpMode {
 
         if (intakeActive) {
             intakeMotor1.setPower(1);
-            intakeMotor2.setPower(1);
+            intakeMotor2.setPower(0.7);
+            intakeStopTime = 0;
         } else {
             intakeMotor1.setPower(0);
-            intakeMotor2.setPower(0);
+            if (intakeStopTime == 0) {
+                intakeStopTime = System.currentTimeMillis();
+            } else if (System.currentTimeMillis() - intakeStopTime > 500) {
+                intakeMotor2.setPower(0);
+            }
         }
 
         // Modes to control power
-        if (gamepad2.dpadUpWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = 0.25;
-            MODE = "High";
-        }
-        if (gamepad2.dpadDownWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = 0.15;
-            MODE = "Low";
-        }
         telemetry.addData("Launcher Mode: ", MODE);
-        telemetry.addData("Launcher Speed Target: ", LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*gamepad1.right_trigger));
+        telemetry.addData("Launcher Speed Target: ", LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER) + launcherPowerBoost);
 
 //        Loading + Launching
-        if (gamepad2.right_bumper && !launcherSequenceStarted) {
+        if (gamepad1.right_bumper && !launcherSequenceStarted) {
             launcherSequenceStarted = true;
-            launcherMotor.setPower(LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*1));
+            launcherMotor.setPower(LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*1) + launcherPowerBoost);
             launcherSequenceStartTime = System.currentTimeMillis();
         }
 
@@ -161,6 +158,30 @@ public class  TeleOpALPHAFirstLauncherBot extends OpMode {
             launcherSequenceLaunched = false;
             launcherSequenceLaunchTime = 0;
             launcherSequenceStartTime = 0;
+        }
+
+//        Launcher Power Boost
+        if (!gamepad1.y && yJustPressed) {
+            yJustPressed = false;
+        }
+
+        if (gamepad1.y && !yJustPressed) {
+            launcherPowerBoost += 0.025;
+            yJustPressed = true;
+        }
+
+        if (!gamepad1.a && aJustPressed) {
+            aJustPressed = false;
+        }
+
+        if (gamepad1.a && !aJustPressed) {
+            launcherPowerBoost -= 0.025;
+            aJustPressed = true;
+        }
+
+//        Launcher Power Reset
+        if (gamepad1.dpadDownWasPressed()) {
+            launcherPowerBoost = 0;
         }
 
 //        OLD Launching
