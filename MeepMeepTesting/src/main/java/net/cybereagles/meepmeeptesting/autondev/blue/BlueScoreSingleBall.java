@@ -6,12 +6,11 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class BlueScoreAllPurple {
+public class BlueScoreSingleBall {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -22,10 +21,11 @@ public class BlueScoreAllPurple {
 
 //        Actions:
 
-        Pose2d startingPos = new Pose2d(-40,-22,deg(220));
+        Pose2d startingPos = new Pose2d(-35,-22,deg(225));
 
         Action moveAwayFromScoreLocation = myBot.getDrive().actionBuilder(startingPos)
-                .strafeTo(new Vector2d(-40,0))
+                .setTangent(deg(90))
+                .splineToLinearHeading(new Pose2d(20, 0, deg(180)), deg(0))
                 .build();
 
         Action fullShoot = new SequentialAction(

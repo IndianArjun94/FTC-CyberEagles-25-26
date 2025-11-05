@@ -14,28 +14,20 @@ public class Launcher {
 
     public Launcher(HardwareMap hardwareMap) {
         this.launcherMotor = hardwareMap.get(DcMotor.class, "launcher");
+        this.launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public class StartLauncherAction implements Action {
 
-        private LauncherPower power;
+        final double power;
 
-        public StartLauncherAction(LauncherPower power) {
+        public StartLauncherAction(double power) {
             this.power = power;
         }
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            switch (power) {
-                case LOW:
-                    launcherMotor.setPower(0.55);
-                    break;
-                case MEDIUM:
-                    launcherMotor.setPower(0.6);
-                    break;
-                case HIGH:
-                    launcherMotor.setPower(0.8);
-            }
+            launcherMotor.setPower(power);
             return false;
         }
     }
@@ -48,7 +40,7 @@ public class Launcher {
         }
     }
 
-    public Action startLauncher(LauncherPower power) {
+    public Action startLauncher(double power) {
         return new StartLauncherAction(power);
     }
 
