@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.module.AprilTagModule;
 import org.firstinspires.ftc.teamcode.module.ObeliskPattern;
 
-@TeleOp(name = "TeleOpBeta")
+@TeleOp(name = "TeleOp Golden")
 public class  TeleOpALPHAFirstLauncherBot extends OpMode {
 
     private static DcMotor leftFrontMotor;
