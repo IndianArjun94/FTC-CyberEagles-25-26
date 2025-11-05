@@ -22,11 +22,11 @@ public class BlueScoreAllPurple {
 
 //        Actions:
 
-        Pose2d startingPos = new Pose2d(-26.5,-9,deg(270));
-        Pose2d existingPos = startingPos;
+//        Pose2d startingPos = new Pose2d(-26.5,-9,deg(270));
+        Pose2d startingPos = new Pose2d(-70,0,deg(0));
 
         Action collectFirstBall = myBot.getDrive().actionBuilder(startingPos)
-                .splineToConstantHeading(new Vector2d(-11.5, -40), deg(270))
+                .splineTo(new Vector2d(-11.5, -40), deg(270))
                 .build();
 
         Action moveToScoreLocation = myBot.getDrive().actionBuilder(new Pose2d(-11.5,-40,deg(270)))
