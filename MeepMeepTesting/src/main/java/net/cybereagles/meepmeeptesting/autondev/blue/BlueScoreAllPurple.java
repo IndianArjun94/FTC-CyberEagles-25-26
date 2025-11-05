@@ -17,28 +17,19 @@ public class BlueScoreAllPurple {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setDimensions(18, 18)
                 .build();
 
 //        Actions:
 
-        Pose2d startingPos = new Pose2d(-9,-9,deg(270));
+        Pose2d startingPos = new Pose2d(-40,-22,deg(220));
 
-        Action moveToScoreLocation = myBot.getDrive().actionBuilder(startingPos)
-                .setTangent(deg(180))
-                .splineToLinearHeading(new Pose2d(-40, -40, deg(220)), deg(270))
-                .build();
-
-        Action moveAwayFromScoreLocation = myBot.getDrive().actionBuilder(new Pose2d(-40, -40, deg(220)))
+        Action moveAwayFromScoreLocation = myBot.getDrive().actionBuilder(startingPos)
                 .strafeTo(new Vector2d(-40,0))
                 .build();
 
         Action fullShoot = new SequentialAction(
-//                startLauncher(),
-                moveToScoreLocation,
-//                startSingleBallLoader(),
                 new SleepAction(4),
-//                stopSingleBallLoader(),
-//                stopLauncher(),
                 moveAwayFromScoreLocation
         );
 

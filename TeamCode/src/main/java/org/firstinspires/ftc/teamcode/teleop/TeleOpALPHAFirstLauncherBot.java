@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.module.AprilTagModule;
 import org.firstinspires.ftc.teamcode.module.ObeliskPattern;
 
 @TeleOp(name = "TeleOpBeta")
-public class TeleOpALPHAFirstLauncherBot extends OpMode {
+public class  TeleOpALPHAFirstLauncherBot extends OpMode {
 
     private static DcMotor leftFrontMotor;
     private static DcMotor rightFrontMotor;
@@ -22,7 +22,7 @@ public class TeleOpALPHAFirstLauncherBot extends OpMode {
     private static double rightFrontPower;
     private static double rightBackPower;
 
-    private static final double SPEED_CAP = 0.8f;
+    private static final double SPEED_CAP = 1f;
     private static final double LAUNCHER_MIN = 0.5f;
     private static double SHOOTING_WHEEL_MULTIPLIER = 0.05f;
 
@@ -119,20 +119,20 @@ public class TeleOpALPHAFirstLauncherBot extends OpMode {
 
         if (intakeActive) {
             intakeMotor1.setPower(1);
-            intakeMotor2.setPower(0.8);
+            intakeMotor2.setPower(1);
         } else {
             intakeMotor1.setPower(0);
             intakeMotor2.setPower(0);
         }
 
         // Modes to control power
-        if (gamepad2.dpadRightWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = 0.4;
-            MODE = "Three";
+        if (gamepad2.dpadUpWasPressed()) {
+            SHOOTING_WHEEL_MULTIPLIER = 0.25;
+            MODE = "High";
         }
         if (gamepad2.dpadDownWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = 0.25;
-            MODE = "Two";
+            SHOOTING_WHEEL_MULTIPLIER = 0.15;
+            MODE = "Low";
         }
         telemetry.addData("Launcher Mode: ", MODE);
         telemetry.addData("Launcher Speed Target: ", LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*gamepad1.right_trigger));
@@ -140,15 +140,11 @@ public class TeleOpALPHAFirstLauncherBot extends OpMode {
 //        Loading + Launching
         if (gamepad2.right_bumper && !launcherSequenceStarted) {
             launcherSequenceStarted = true;
-            if (SHOOTING_WHEEL_MULTIPLIER == 0.4) {
-                launcherMotor.setPower(LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*gamepad1.right_trigger));
-            } else {
-                launcherMotor.setPower(LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*1));
-            }
+            launcherMotor.setPower(LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*1));
             launcherSequenceStartTime = System.currentTimeMillis();
         }
 
-        if (launcherSequenceStarted && System.currentTimeMillis() - launcherSequenceStartTime >= 2000 && !launcherSequenceLaunched) {
+        if (launcherSequenceStarted && System.currentTimeMillis() - launcherSequenceStartTime >= 3000 && !launcherSequenceLaunched) {
             leftLoadServo.setPower(1);
             rightLoadServo.setPower(1);
             intakeMotor2.setPower(1);
