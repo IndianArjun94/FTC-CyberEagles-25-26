@@ -69,6 +69,7 @@ public class BlueScoreAllPurplePreload{
 //                stopLauncher(),
                 moveAwayFromScoreLocation,
                 loadSecondBall,
+                new SleepAction(4),
 //                startIntake(),
                 collectSecondBall,
                 new SleepAction(2),
