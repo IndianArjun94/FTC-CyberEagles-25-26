@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.module.AprilTagModule;
 import org.firstinspires.ftc.teamcode.module.ObeliskPattern;
 
-@TeleOp(name = "TeleOpBeta")
-public class TeleOpALPHAFirstLauncherBot extends OpMode {
+@TeleOp(name = "TeleOp Golden")
+public class  TeleOpALPHAFirstLauncherBot extends OpMode {
 
     private static DcMotor leftFrontMotor;
     private static DcMotor rightFrontMotor;
@@ -22,19 +22,25 @@ public class TeleOpALPHAFirstLauncherBot extends OpMode {
     private static double rightFrontPower;
     private static double rightBackPower;
 
-    private static final double SPEED_CAP = 0.5f;
+    private static final double SPEED_CAP = 0.8f;
     private static final double LAUNCHER_MIN = 0.5f;
-    private static double SHOOTING_WHEEL_MULTIPLIER = 0.05f;
-
-    private static boolean loading = false;
+    private static double SHOOTING_WHEEL_MULTIPLIER = 0.18f;
+    private static double launcherPowerBoost = 0.0;
     private static boolean intakeActive = false;
     private static CRServo leftLoadServo;
     private static CRServo rightLoadServo;
     private static DcMotor launcherMotor;
-    private static DcMotor intakeMotor;
+    private static DcMotor intakeMotor1;
+    private static DcMotor intakeMotor2;
     private static double previousIntakeUpdateTime = System.currentTimeMillis();
-
-    private static String MODE = "One";
+    private static String MODE = "Regular Power";
+    private static boolean launcherSequenceStarted = false;
+    private static long launcherSequenceStartTime;
+    private static boolean launcherSequenceLaunched = false;
+    private static long launcherSequenceLaunchTime;
+    private static boolean yJustPressed = false;
+    private static boolean aJustPressed = false;
+    private static long intakeStopTime;
 
     @Override
     public void init() {
@@ -42,7 +48,8 @@ public class TeleOpALPHAFirstLauncherBot extends OpMode {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFront");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBack");
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBack");
-        intakeMotor = hardwareMap.get(DcMotor.class, "intake");
+        intakeMotor1 = hardwareMap.get(DcMotor.class, "intake1");
+        intakeMotor2 = hardwareMap.get(DcMotor.class, "intake2");
 
         leftLoadServo = hardwareMap.get(CRServo.class, "leftLoad");
         rightLoadServo = hardwareMap.get(CRServo.class, "rightLoad");
@@ -50,9 +57,11 @@ public class TeleOpALPHAFirstLauncherBot extends OpMode {
         launcherMotor = hardwareMap.get(DcMotor.class, "launcher");
         leftLoadServo.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         launcherMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        intakeMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         AprilTagModule.init(hardwareMap, true);
 
@@ -79,39 +88,23 @@ public class TeleOpALPHAFirstLauncherBot extends OpMode {
         double gamepad1_y = -gamepad1.left_stick_y;
         double gamepad1_x = -gamepad1.left_stick_x;
 
-        //Rotation
+        // Rotation
         leftBackPower += gamepad1_x2;
         leftFrontPower += gamepad1_x2;
         rightFrontPower -= gamepad1_x2;
         rightBackPower -= gamepad1_x2;
 
-        //Forward/Backward
+        // Forward/Backward
         leftFrontPower += gamepad1_y;
         leftBackPower += gamepad1_y;
         rightFrontPower += gamepad1_y;
         rightBackPower += gamepad1_y;
 
-        //Lateral
+        // Lateral
         leftFrontPower -= gamepad1_x;
         leftBackPower += gamepad1_x;
-        rightFrontPower -= gamepad1_x;
-        rightBackPower += gamepad1_x;
-
-
-//        Loading
-        if (gamepad1.a) {
-            loading = true;
-        } else if (gamepad1.b) {
-            loading = false;
-        }
-
-        if (loading) {
-            rightLoadServo.setPower(1);
-            leftLoadServo.setPower(1);
-        } else {
-            rightLoadServo.setPower(0);
-            leftLoadServo.setPower(0);
-        }
+        rightFrontPower += gamepad1_x;
+        rightBackPower -= gamepad1_x;
 
 //        Intake
         if (gamepad1.left_bumper && System.currentTimeMillis()-previousIntakeUpdateTime > 250) {
@@ -125,35 +118,80 @@ public class TeleOpALPHAFirstLauncherBot extends OpMode {
         }
 
         if (intakeActive) {
-            intakeMotor.setPower(1);
+            intakeMotor1.setPower(1);
+            intakeMotor2.setPower(0.7);
+            intakeStopTime = 0;
         } else {
-            intakeMotor.setPower(0);
+            intakeMotor1.setPower(0);
+            if (intakeStopTime == 0) {
+                intakeStopTime = System.currentTimeMillis();
+            } else if (System.currentTimeMillis() - intakeStopTime > 500) {
+                intakeMotor2.setPower(0);
+            }
         }
 
         // Modes to control power
-        if (gamepad1.dpadRightWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = 0.3;
-            MODE = "Three";
-        }
-        if (gamepad1.dpadDownWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = 0.1;
-            MODE = "Two";
-        }
-        if (gamepad1.dpadLeftWasPressed()) {
-            SHOOTING_WHEEL_MULTIPLIER = 0.05;
-            MODE = "One";
-        }
         telemetry.addData("Launcher Mode: ", MODE);
-        telemetry.addData("Launcher Speed Target: ", LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*gamepad1.right_trigger));
+        telemetry.addData("Launcher Speed Target: ", LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER) + launcherPowerBoost);
 
-
-//        Launching
-        if (gamepad1.right_trigger > 0.05) {
-            launcherMotor.setPower(LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*gamepad1.right_trigger));
-        } else {
-            launcherMotor.setPower(0);
+//        Loading + Launching
+        if (gamepad1.right_bumper && !launcherSequenceStarted) {
+            launcherSequenceStarted = true;
+            launcherMotor.setPower(LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*1) + launcherPowerBoost);
+            launcherSequenceStartTime = System.currentTimeMillis();
         }
 
+        if (launcherSequenceStarted && System.currentTimeMillis() - launcherSequenceStartTime >= 3000 && !launcherSequenceLaunched) {
+            leftLoadServo.setPower(1);
+            rightLoadServo.setPower(1);
+            intakeMotor2.setPower(1);
+            launcherSequenceLaunched = true;
+            launcherSequenceLaunchTime = System.currentTimeMillis();
+        }
+
+        if (launcherSequenceLaunched && System.currentTimeMillis() - launcherSequenceLaunchTime >= 1750) {
+            launcherMotor.setPower(0);
+            leftLoadServo.setPower(0);
+            rightLoadServo.setPower(0);
+            intakeMotor2.setPower(0);
+            launcherSequenceStarted = false;
+            launcherSequenceLaunched = false;
+            launcherSequenceLaunchTime = 0;
+            launcherSequenceStartTime = 0;
+        }
+
+//        Launcher Power Boost
+        if (!gamepad1.y && yJustPressed) {
+            yJustPressed = false;
+        }
+
+        if (gamepad1.y && !yJustPressed) {
+            launcherPowerBoost += 0.025;
+            yJustPressed = true;
+        }
+
+        if (!gamepad1.a && aJustPressed) {
+            aJustPressed = false;
+        }
+
+        if (gamepad1.a && !aJustPressed) {
+            launcherPowerBoost -= 0.025;
+            aJustPressed = true;
+        }
+
+//        Launcher Power Reset
+        if (gamepad1.dpadDownWasPressed()) {
+            launcherPowerBoost = 0;
+        }
+
+//        OLD Launching
+//        if (gamepad1.right_trigger > 0.05) {
+//            launcherMotor.setPower(LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*gamepad1.right_trigger));
+//        } else {
+//            launcherMotor.setPower(0);
+//        }
+
+//        Camera Apriltag Detection
         ObeliskPattern obeliskPattern = AprilTagModule.instance.getObeliskPattern();
 
         if (obeliskPattern == ObeliskPattern.GPP) {

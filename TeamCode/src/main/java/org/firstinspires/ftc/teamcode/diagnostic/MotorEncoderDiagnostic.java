@@ -20,7 +20,6 @@ public class MotorEncoderDiagnostic extends OpMode {
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBack");
 
         rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
