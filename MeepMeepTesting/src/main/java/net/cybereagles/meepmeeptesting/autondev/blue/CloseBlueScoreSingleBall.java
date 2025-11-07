@@ -5,13 +5,12 @@ import static net.cybereagles.meepmeeptesting.Util.deg;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class BlueScoreSingleBall {
+public class CloseBlueScoreSingleBall {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -22,17 +21,17 @@ public class BlueScoreSingleBall {
 
 //        Actions:
 
-        Pose2d startingPos = new Pose2d(63,-15,deg(180));
+        Pose2d startingPos = new Pose2d(-52.5,-46.5,deg(235));
 
         Action goToGoal = myBot.getDrive().actionBuilder(startingPos)
-                .setTangent(deg(200))
-                .splineToLinearHeading(
-                        new Pose2d(-26,-13,deg(230)), deg(170))
+                .setTangent(deg(55))
+                .splineToConstantHeading(
+                        new Vector2d(-22.5,-14), deg(55))
                 .build();
 // TODO update goal angle
-        Action goAwayFromGoal = myBot.getDrive().actionBuilder(new Pose2d(-26,-13,deg(230)))
-                .setTangent(deg(150))
-                .splineToLinearHeading(new Pose2d(-61, -10, deg(180)), deg(180))
+        Action goAwayFromGoal = myBot.getDrive().actionBuilder(new Pose2d(-22.5,-14,deg(235)))
+                .setTangent(deg(270))
+                .splineToLinearHeading(new Pose2d(-34, -53, deg(270)), deg(280))
                 .build();
 
         Action fullShoot = new SequentialAction(

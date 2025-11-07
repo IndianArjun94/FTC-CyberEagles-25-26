@@ -107,7 +107,7 @@ public class  TeleOpALPHAFirstLauncherBot extends OpMode {
         rightBackPower -= gamepad1_x;
 
 //        Intake
-        if (gamepad1.left_bumper && System.currentTimeMillis()-previousIntakeUpdateTime > 250) {
+        if (gamepad2.left_bumper && System.currentTimeMillis()-previousIntakeUpdateTime > 250) {
             if (intakeActive) {
                 intakeActive = false;
                 previousIntakeUpdateTime = System.currentTimeMillis();
@@ -135,7 +135,7 @@ public class  TeleOpALPHAFirstLauncherBot extends OpMode {
         telemetry.addData("Launcher Speed Target: ", LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER) + launcherPowerBoost);
 
 //        Loading + Launching
-        if (gamepad1.right_bumper && !launcherSequenceStarted) {
+        if (gamepad2.right_bumper && !launcherSequenceStarted) {
             launcherSequenceStarted = true;
             launcherMotor.setPower(LAUNCHER_MIN + (SHOOTING_WHEEL_MULTIPLIER*1) + launcherPowerBoost);
             launcherSequenceStartTime = System.currentTimeMillis();
@@ -161,26 +161,26 @@ public class  TeleOpALPHAFirstLauncherBot extends OpMode {
         }
 
 //        Launcher Power Boost
-        if (!gamepad1.y && yJustPressed) {
+        if (!gamepad2.y && yJustPressed) {
             yJustPressed = false;
         }
 
-        if (gamepad1.y && !yJustPressed) {
+        if (gamepad2.y && !yJustPressed) {
             launcherPowerBoost += 0.025;
             yJustPressed = true;
         }
 
-        if (!gamepad1.a && aJustPressed) {
+        if (!gamepad2.a && aJustPressed) {
             aJustPressed = false;
         }
 
-        if (gamepad1.a && !aJustPressed) {
+        if (gamepad2.a && !aJustPressed) {
             launcherPowerBoost -= 0.025;
             aJustPressed = true;
         }
 
 //        Launcher Power Reset
-        if (gamepad1.dpadDownWasPressed()) {
+        if (gamepad2.dpadDownWasPressed()) {
             launcherPowerBoost = 0;
         }
 
