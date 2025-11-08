@@ -37,7 +37,7 @@ public class FARBLUEScoreSingleBall extends LinearOpMode {
                 .build();
 
         Action fullAction = new SequentialAction(
-                launcher.startLauncher(0.68),
+                launcher.startLauncher(0.65),
                 goToGoal,
                 new SleepAction(0.25),
                 loader.startSingleBallLoader(),
