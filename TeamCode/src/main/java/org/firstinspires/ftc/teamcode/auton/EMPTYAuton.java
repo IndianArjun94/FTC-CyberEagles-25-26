@@ -9,20 +9,24 @@ import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.auton.action.launcher.Launcher;
 import org.firstinspires.ftc.teamcode.auton.action.loader.SingleBallLoader;
 
-@Autonomous(name = "FAR RED Single Ball")
-public class EMPTYAuton extends LinearOpMode {
+@Autonomous(name = "EMPTY Auton")
+public class EMPTYAuton extends OpMode {
 
     @Override
-    public void runOpMode() throws InterruptedException {
-        waitForStart();
+    public void init() {
+        telemetry.addData("sig", "sig");
+        telemetry.update();
+    }
 
-        while (opModeIsActive()) {
-
-        }
+    @Override
+    public void loop() {
+        telemetry.addData("sig2", "sig");
+        telemetry.update();
     }
 }

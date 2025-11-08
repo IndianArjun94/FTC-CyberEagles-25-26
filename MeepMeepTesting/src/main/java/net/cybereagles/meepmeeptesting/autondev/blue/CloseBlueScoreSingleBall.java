@@ -31,7 +31,7 @@ public class CloseBlueScoreSingleBall {
 // TODO update goal angle
         Action goAwayFromGoal = myBot.getDrive().actionBuilder(new Pose2d(-22.5,-14,deg(235)))
                 .setTangent(deg(270))
-                .splineToLinearHeading(new Pose2d(-34, -53, deg(270)), deg(280))
+                .splineToLinearHeading(new Pose2d(-24, -53, deg(270)), deg(280))
                 .build();
 
         Action fullShoot = new SequentialAction(

@@ -34,11 +34,11 @@ public class CLOSEREDScoreSingleBall extends LinearOpMode {
 // TODO update goal angle
         Action goAwayFromGoal = drive.actionBuilder(new Pose2d(-22.5,14,deg(125)))
                 .setTangent(deg(90))
-                .splineToLinearHeading(new Pose2d(-34, 53, deg(90)), deg(80))
+                .splineToLinearHeading(new Pose2d(-24, 53, deg(90)), deg(80))
                 .build();
 
         Action fullAction = new SequentialAction(
-                launcher.startLauncher(0.72),
+                launcher.startLauncher(0.63),
                 goToGoal,
                 new SleepAction(0.25),
                 loader.startSingleBallLoader(),
