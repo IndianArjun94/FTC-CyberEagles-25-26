@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton.action.test;
+package org.firstinspires.ftc.teamcode.auton.test;
 
 import static org.firstinspires.ftc.teamcode.auton.Util.deg;
 
@@ -15,9 +15,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.action.module.intake.Intake;
-import org.firstinspires.ftc.teamcode.auton.action.module.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.action.module.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.module.intake.Intake;
+import org.firstinspires.ftc.teamcode.auton.module.launcher.Launcher;
+import org.firstinspires.ftc.teamcode.auton.module.loader.SingleBallLoader;
 
 import java.util.Arrays;
 
