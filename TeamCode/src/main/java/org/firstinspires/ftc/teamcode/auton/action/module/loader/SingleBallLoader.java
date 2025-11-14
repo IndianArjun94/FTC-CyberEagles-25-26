@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton.action.loader;
+package org.firstinspires.ftc.teamcode.auton.action.module.loader;
 
 import androidx.annotation.NonNull;
 
@@ -7,8 +7,6 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.teamcode.auton.action.intake.Intake;
 
 public class SingleBallLoader {
 

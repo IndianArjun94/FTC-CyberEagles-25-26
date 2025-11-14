@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.action.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.action.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.action.module.launcher.Launcher;
+import org.firstinspires.ftc.teamcode.auton.action.module.loader.SingleBallLoader;
 
 @Autonomous(name = "CLOSE BLUE Single Ball")
 public class CLOSEBLUEScoreSingleBall extends LinearOpMode {

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton.action.intake;
+package org.firstinspires.ftc.teamcode.auton.action.module.intake;
 
 import androidx.annotation.NonNull;
 

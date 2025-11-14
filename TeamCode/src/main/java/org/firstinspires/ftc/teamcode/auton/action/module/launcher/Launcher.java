@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton.action.launcher;
+package org.firstinspires.ftc.teamcode.auton.action.module.launcher;
 
 import androidx.annotation.NonNull;
 
@@ -6,8 +6,6 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.teamcode.auton.action.loader.LauncherPower;
 
 public class Launcher {
     private DcMotor launcherMotor;
