@@ -59,7 +59,7 @@ public class CLOSEBLUEScoreMultipleBalls extends LinearOpMode {
                 .build();
 
         Action goToGoal2 = drive.actionBuilder(ball2Pos)
-                .setTangent(90)
+                .setTangent(deg(90))
                 .splineToLinearHeading(goalPos, deg(180), velConstraintForBalls)
                 .build();
 
@@ -69,7 +69,7 @@ public class CLOSEBLUEScoreMultipleBalls extends LinearOpMode {
                 .build();
 
         Action goToGoal3 = drive.actionBuilder(ball3Pos)
-                .setTangent(90)
+                .setTangent(deg(90))
                 .splineToLinearHeading(goalPos, deg(180), velConstraintForBalls)
                 .build();
 
@@ -79,7 +79,7 @@ public class CLOSEBLUEScoreMultipleBalls extends LinearOpMode {
                 .build();
 
         Action goToGoal4 = drive.actionBuilder(ball4Pos)
-                .setTangent(90)
+                .setTangent(deg(90))
                 .splineToLinearHeading(goalPos, deg(180), velConstraintForBalls)
                 .build();
 
