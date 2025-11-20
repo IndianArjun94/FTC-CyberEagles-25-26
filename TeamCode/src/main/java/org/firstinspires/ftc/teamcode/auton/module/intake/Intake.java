@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton.action.module.intake;
+package org.firstinspires.ftc.teamcode.auton.module.intake;
 
 import androidx.annotation.NonNull;
 
@@ -14,7 +14,7 @@ public class Intake {
     private DcMotor intakeMotor2;
 
     public Intake(HardwareMap hardwareMap) {
-        this.intakeMotor = hardwareMap.get(DcMotor.class, "intake");
+        this.intakeMotor = hardwareMap.get(DcMotor.class, "intake1");
         this.intakeMotor2 = hardwareMap.get(DcMotor.class, "intake2");
         this.intakeMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
     }
