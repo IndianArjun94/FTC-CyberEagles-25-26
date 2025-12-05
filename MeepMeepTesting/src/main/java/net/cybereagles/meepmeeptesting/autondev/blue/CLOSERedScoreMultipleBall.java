@@ -27,16 +27,19 @@ public class CLOSERedScoreMultipleBall {
                 .build();
 
 //        Actions:
-
         Pose2d startingPos = new Pose2d(-52.5,46.5,deg(125));
-        Pose2d goalPos = new Pose2d(-22.5, 14, deg(125));
+        Pose2d goalPos = new Pose2d(-22.5, 14, deg(131));
         Vector2d goalVector = new Vector2d(-22.5, 14);
-        Pose2d ball2Pos = new Pose2d(-11.5, 34, deg(90));
-        Pose2d ball3Pos = new Pose2d(-11.5, 38, deg(90));
-        Pose2d ball4Pos = new Pose2d(-11.5, 43, deg(90));
-        Pose2d ball5Pos = new Pose2d(11.5, 34, deg(90));
-        Pose2d ball6Pos = new Pose2d(11.5, 38, deg(90));
-        Pose2d ball7Pos = new Pose2d(11.5, 43, deg(90));
+        Pose2d ball2Pos = new Pose2d(-11.5, 31, deg(90));
+        Pose2d ball3Pos = new Pose2d(-11.5, 35, deg(90));
+        Pose2d ball4Pos = new Pose2d(-11.5, 40, deg(90));
+        Pose2d ball5Pos = new Pose2d(11.5, 29, deg(90));
+        Pose2d ball6Pos = new Pose2d(11.5, 33, deg(90));
+        Pose2d ball7Pos = new Pose2d(11.5, 38, deg(90));
+
+
+        final float launcherPower = 0.68f;
+        final float sleepTime = 0.75f;
 
         MinVelConstraint slowVelConstraint = new MinVelConstraint(Arrays.asList(
                 new TranslationalVelConstraint(18), // 15 in. per sec cap
@@ -44,7 +47,7 @@ public class CLOSERedScoreMultipleBall {
                 )));
 
         MinVelConstraint fastVelConstraint = new MinVelConstraint(Arrays.asList(
-                new TranslationalVelConstraint(22.5), // 15 in. per sec cap
+                new TranslationalVelConstraint(25), // 15 in. per sec cap
                 new AngularVelConstraint(deg(180) // 180 deg per sec cap
                 )));
 
@@ -114,8 +117,6 @@ public class CLOSERedScoreMultipleBall {
                 .setTangent(deg(270))
                 .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
                 .build();
-
-        final float sleepTime = 0.25f;
 
         Action fullAction = new SequentialAction(
                 goToGoal1,

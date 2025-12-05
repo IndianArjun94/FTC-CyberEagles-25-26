@@ -38,12 +38,25 @@ public class Launcher {
         }
     }
 
+    public class EjectLauncherAction implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            launcherMotor.setPower(-0.3);
+            return false;
+        }
+    }
+
+
     public Action startLauncher(double power) {
         return new StartLauncherAction(power);
     }
 
     public Action stopLauncher() {
         return new StopLauncherAction();
+    }
+
+    public Action ejectLauncher() {
+        return new EjectLauncherAction();
     }
 }
 

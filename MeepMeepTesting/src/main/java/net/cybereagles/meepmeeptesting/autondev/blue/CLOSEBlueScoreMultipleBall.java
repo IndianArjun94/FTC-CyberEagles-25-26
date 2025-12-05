@@ -61,7 +61,7 @@ public class CLOSEBlueScoreMultipleBall {
                 .build();
 
         Action goToGoal2 = myBot.getDrive().actionBuilder(ball2Pos)
-                .setTangent(90)
+                .setTangent(deg(90))
                 .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
                 .build();
 

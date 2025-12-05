@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.auton.Util.deg;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.MinVelConstraint;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
@@ -23,26 +24,24 @@ import java.util.Arrays;
 
 @Autonomous(name = "CLOSE RED Multiple Balls")
 public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
-
-    @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         Pose2d startingPos = new Pose2d(-52.5,46.5,deg(125));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
         Launcher launcher = new Launcher(hardwareMap);
         SingleBallLoader loader = new SingleBallLoader(hardwareMap);
-        Intake intake = new Intake(hardwareMap);
+        Intake intake = new Intake(hardwareMap, drive, telemetry);
 
-        Pose2d goalPos = new Pose2d(-22.5, 14, deg(130));
+        Pose2d goalPos = new Pose2d(-22.5, 14, deg(131));
         Vector2d goalVector = new Vector2d(-22.5, 14);
-        Pose2d ball2Pos = new Pose2d(-10, 28, deg(90));
-        Pose2d ball3Pos = new Pose2d(-10, 32, deg(90));
-        Pose2d ball4Pos = new Pose2d(-10, 37, deg(90));
-        Pose2d ball5Pos = new Pose2d(12.5, 26, deg(90));
-        Pose2d ball6Pos = new Pose2d(12.5, 30, deg(90));
-        Pose2d ball7Pos = new Pose2d(12.5, 35, deg(90));
+        Pose2d ball2Pos = new Pose2d(-13, 30, deg(90));
+        Pose2d ball3Pos = new Pose2d(-13, 36, deg(90));
+        Pose2d ball4Pos = new Pose2d(-13, 41, deg(90));
+        Pose2d ball5Pos = new Pose2d(11.5, 29.5, deg(90));
+        Pose2d ball6Pos = new Pose2d(11.5, 34, deg(90));
+        Pose2d ball7Pos = new Pose2d(11.5, 38, deg(90));
 
-        final float launcherPower = 0.68f;
+        final float launcherPower = 0.76f;
         final float sleepTime = 0.75f;
 
         MinVelConstraint slowVelConstraint = new MinVelConstraint(Arrays.asList(
@@ -122,10 +121,8 @@ public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
                 .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
                 .build();
 
-
-
         Action fullBall1 = new SequentialAction(
-                launcher.startLauncher(launcherPower-0.06),
+                launcher.startLauncher(launcherPower-0.1),
                 goToGoal1,
                 loader.startSingleBallLoader(),
                 new SleepAction(sleepTime+0.5),
@@ -135,10 +132,16 @@ public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
 
         Action fullBall2 = new SequentialAction(
                 intake.startActiveIntake(),
+                launcher.ejectLauncher(),
                 goToBall2,
-                intake.stopActiveIntake(),
+    //                intake.stopActiveIntake(),
                 launcher.startLauncher(launcherPower+0.06),
-                goToGoal2,
+                new ParallelAction(
+                        goToGoal2,
+                        new SequentialAction(
+                                new SleepAction(0.3),
+                                intake.stopActiveIntake()
+                        )),
                 loader.startSingleBallLoader(),
                 new SleepAction(sleepTime),
                 loader.stopSingleBallLoader(),
@@ -147,10 +150,16 @@ public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
 
         Action fullBall3 = new SequentialAction(
                 intake.startActiveIntake(),
+                launcher.ejectLauncher(),
                 goToBall3,
-                intake.stopActiveIntake(),
+    //                intake.stopActiveIntake(),
                 launcher.startLauncher(launcherPower),
-                goToGoal3,
+                new ParallelAction(
+                        goToGoal3,
+                        new SequentialAction(
+                                new SleepAction(0.3),
+                                intake.stopActiveIntake()
+                        )),
                 loader.startSingleBallLoader(),
                 new SleepAction(sleepTime),
                 loader.stopSingleBallLoader(),
@@ -159,10 +168,16 @@ public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
 
         Action fullBall4 = new SequentialAction(
                 intake.startActiveIntake(),
+                launcher.ejectLauncher(),
                 goToBall4,
-                intake.stopActiveIntake(),
+    //                intake.stopActiveIntake(),
                 launcher.startLauncher(launcherPower),
-                goToGoal4,
+                new ParallelAction(
+                        goToGoal4,
+                        new SequentialAction(
+                                new SleepAction(0.3),
+                                intake.stopActiveIntake()
+                        )),
                 loader.startSingleBallLoader(),
                 new SleepAction(sleepTime),
                 loader.stopSingleBallLoader(),
@@ -171,10 +186,16 @@ public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
 
         Action fullBall5 = new SequentialAction(
                 intake.startActiveIntake(),
+                launcher.ejectLauncher(),
                 goToBall5,
-                intake.stopActiveIntake(),
+    //                intake.stopActiveIntake(),
                 launcher.startLauncher(launcherPower),
-                goToGoal5,
+                new ParallelAction(
+                        goToGoal5,
+                        new SequentialAction(
+                                new SleepAction(0.3),
+                                intake.stopActiveIntake()
+                        )),
                 loader.startSingleBallLoader(),
                 new SleepAction(sleepTime),
                 loader.stopSingleBallLoader(),
@@ -183,10 +204,16 @@ public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
 
         Action fullBall6 = new SequentialAction(
                 intake.startActiveIntake(),
+                launcher.ejectLauncher(),
                 goToBall6,
-                intake.stopActiveIntake(),
+    //                intake.stopActiveIntake(),
                 launcher.startLauncher(launcherPower),
-                goToGoal6,
+                new ParallelAction(
+                        goToGoal6,
+                        new SequentialAction(
+                                new SleepAction(0.3),
+                                intake.stopActiveIntake()
+                        )),
                 loader.startSingleBallLoader(),
                 new SleepAction(sleepTime),
                 loader.stopSingleBallLoader(),
@@ -195,10 +222,16 @@ public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
 
         Action fullBall7 = new SequentialAction(
                 intake.startActiveIntake(),
+                launcher.ejectLauncher(),
                 goToBall7,
-                intake.stopActiveIntake(),
+    //                intake.stopActiveIntake(),
                 launcher.startLauncher(launcherPower),
-                goToGoal7,
+                new ParallelAction(
+                        goToGoal7,
+                        new SequentialAction(
+                                new SleepAction(0.3),
+                                intake.stopActiveIntake()
+                        )),
                 loader.startSingleBallLoader(),
                 new SleepAction(sleepTime),
                 loader.stopSingleBallLoader(),
@@ -217,7 +250,7 @@ public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
 
         waitForStart();
 
-        Actions.runBlocking(fullAction);
+            Actions.runBlocking(fullAction);
 
     }
 }
