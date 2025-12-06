@@ -40,12 +40,26 @@ public class SingleBallLoader {
         }
     }
 
+    public class EjectServos implements Action {
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            leftLoadServo.setPower(-0.65);
+            rightLoadServo.setPower(-0.65);
+            return false;
+        }
+    }
+
     public Action startSingleBallLoader() {
         return new StartSingleBallLoaderAction();
     }
 
     public Action stopSingleBallLoader() {
         return new StopSingleBallLoaderAction();
+    }
+
+    public Action ejectServos() {
+        return new EjectServos();
     }
 
 }

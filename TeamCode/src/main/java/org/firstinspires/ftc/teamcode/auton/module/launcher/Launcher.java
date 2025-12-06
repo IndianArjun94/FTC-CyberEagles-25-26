@@ -41,7 +41,7 @@ public class Launcher {
     public class EjectLauncherAction implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            launcherMotor.setPower(-0.3);
+//            launcherMotor.setPower(-0.3);
             return false;
         }
     }

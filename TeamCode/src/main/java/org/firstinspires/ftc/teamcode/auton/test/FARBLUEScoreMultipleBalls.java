@@ -13,6 +13,7 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
@@ -22,12 +23,13 @@ import org.firstinspires.ftc.teamcode.auton.module.loader.SingleBallLoader;
 
 import java.util.Arrays;
 
-@Autonomous(name = "CLOSE BLUE Multiple Balls")
-public class CLOSEBLUEScoreMultipleBalls extends LinearOpMode {
+@Disabled
+@Autonomous(name = "FAR BLUE Multiple Balls")
+public class FARBLUEScoreMultipleBalls extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startingPos = new Pose2d(-52.5,-46.5,deg(235));
+        Pose2d startingPos = new Pose2d(63,-15,deg(180));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
         Launcher launcher = new Launcher(hardwareMap);
@@ -43,7 +45,7 @@ public class CLOSEBLUEScoreMultipleBalls extends LinearOpMode {
         Pose2d ball6Pos = new Pose2d(11.5, -34, deg(270));
         Pose2d ball7Pos = new Pose2d(11.5, -38, deg(270));
 
-        final float launcherPower = 0.66f;
+        final float launcherPower = 0.69f;
         final float sleepTime = 0.75f;
 
         MinVelConstraint slowVelConstraint = new MinVelConstraint(Arrays.asList(
@@ -56,11 +58,10 @@ public class CLOSEBLUEScoreMultipleBalls extends LinearOpMode {
                 new AngularVelConstraint(deg(180) // 180 deg per sec cap
                 )));
 
-
         Action goToGoal1 = drive.actionBuilder(startingPos)
-                .setTangent(deg(55))
-                .splineToConstantHeading(
-                        goalVector, deg(55))
+                .setTangent(deg(160))
+                .splineTo(
+                        goalVector, deg(190))
                 .build();
 
         Action goToBall2 = drive.actionBuilder(goalPos)
