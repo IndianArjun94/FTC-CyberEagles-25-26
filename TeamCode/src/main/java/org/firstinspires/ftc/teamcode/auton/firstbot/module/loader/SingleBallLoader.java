@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton.module.loader;
+package org.firstinspires.ftc.teamcode.auton.firstbot.module.loader;
 
 import androidx.annotation.NonNull;
 

@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.auton;
+package org.firstinspires.ftc.teamcode.auton.firstbot;
 
-import static org.firstinspires.ftc.teamcode.auton.Util.deg;
+import static org.firstinspires.ftc.teamcode.auton.firstbot.Util.deg;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -11,29 +11,29 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.module.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.module.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.firstbot.module.launcher.Launcher;
+import org.firstinspires.ftc.teamcode.auton.firstbot.module.loader.SingleBallLoader;
 
-@Autonomous(name = "FAR BLUE Single Ball")
-public class FARBLUEScoreSingleBall extends LinearOpMode {
+@Autonomous(name = "FAR RED Single Ball")
+public class FARREDScoreSingleBall extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startingPos = new Pose2d(63,-15,deg(180));
+        Pose2d startingPos = new Pose2d(63,15,deg(180));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
         Launcher launcher = new Launcher(hardwareMap);
         SingleBallLoader loader = new SingleBallLoader(hardwareMap);
 
         Action goToGoal = drive.actionBuilder(startingPos)
-                .setTangent(deg(200))
+                .setTangent(deg(160))
                 .splineToLinearHeading(
-                        new Pose2d(-26,-13,deg(230)), deg(170))
+                        new Pose2d(-26,13,deg(130)), deg(190))
                 .build();
 // TODO update goal angle
-        Action goAwayFromGoal = drive.actionBuilder(new Pose2d(-26,-13,deg(230)))
+        Action goAwayFromGoal = drive.actionBuilder(new Pose2d(-26,13,deg(190)))
                 .setTangent(deg(150))
-                .splineToLinearHeading(new Pose2d(-61, -10, deg(180)), deg(180))
+                .splineToLinearHeading(new Pose2d(-61, 10, deg(180)), deg(180))
                 .build();
 
         Action fullAction = new SequentialAction(

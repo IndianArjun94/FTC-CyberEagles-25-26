@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.auton;
+package org.firstinspires.ftc.teamcode.auton.firstbot;
 
-import static org.firstinspires.ftc.teamcode.auton.Util.deg;
+import static org.firstinspires.ftc.teamcode.auton.firstbot.Util.deg;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -12,29 +12,29 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.module.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.module.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.firstbot.module.launcher.Launcher;
+import org.firstinspires.ftc.teamcode.auton.firstbot.module.loader.SingleBallLoader;
 
-@Autonomous(name = "CLOSE RED Single Ball")
-public class CLOSEREDScoreSingleBall extends LinearOpMode {
+@Autonomous(name = "CLOSE BLUE Single Ball")
+public class CLOSEBLUEScoreSingleBall extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startingPos = new Pose2d(-52.5,46.5,deg(125));
+        Pose2d startingPos = new Pose2d(-52.5,-46.5,deg(235));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
         Launcher launcher = new Launcher(hardwareMap);
         SingleBallLoader loader = new SingleBallLoader(hardwareMap);
 
         Action goToGoal = drive.actionBuilder(startingPos)
-                .setTangent(deg(235))
+                .setTangent(deg(55))
                 .splineToConstantHeading(
-                        new Vector2d(-22.5,14), deg(235))
+                        new Vector2d(-22.5,-14), deg(55))
                 .build();
 // TODO update goal angle
-        Action goAwayFromGoal = drive.actionBuilder(new Pose2d(-22.5,14,deg(125)))
-                .setTangent(deg(90))
-                .splineToLinearHeading(new Pose2d(-24, 53, deg(90)), deg(80))
+        Action goAwayFromGoal = drive.actionBuilder(new Pose2d(-22.5,-14,deg(235)))
+                .setTangent(deg(270))
+                .splineToLinearHeading(new Pose2d(-24, -53, deg(270)), deg(280))
                 .build();
 
         Action fullAction = new SequentialAction(

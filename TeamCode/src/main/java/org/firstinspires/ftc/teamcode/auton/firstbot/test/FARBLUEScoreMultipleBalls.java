@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.auton.test;
+package org.firstinspires.ftc.teamcode.auton.firstbot.test;
 
-import static org.firstinspires.ftc.teamcode.auton.Util.deg;
+import static org.firstinspires.ftc.teamcode.auton.firstbot.Util.deg;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
@@ -17,9 +17,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.module.intake.Intake;
-import org.firstinspires.ftc.teamcode.auton.module.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.module.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.firstbot.module.intake.Intake;
+import org.firstinspires.ftc.teamcode.auton.firstbot.module.launcher.Launcher;
+import org.firstinspires.ftc.teamcode.auton.firstbot.module.loader.SingleBallLoader;
 
 import java.util.Arrays;
 

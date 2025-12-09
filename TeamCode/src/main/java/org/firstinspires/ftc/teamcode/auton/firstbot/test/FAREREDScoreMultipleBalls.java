@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.auton.test;
+package org.firstinspires.ftc.teamcode.auton.firstbot.test;
 
-import static org.firstinspires.ftc.teamcode.auton.Util.deg;
+import static org.firstinspires.ftc.teamcode.auton.firstbot.Util.deg;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
@@ -16,16 +16,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.module.intake.Intake;
-import org.firstinspires.ftc.teamcode.auton.module.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.module.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.firstbot.module.intake.Intake;
+import org.firstinspires.ftc.teamcode.auton.firstbot.module.launcher.Launcher;
+import org.firstinspires.ftc.teamcode.auton.firstbot.module.loader.SingleBallLoader;
 
 import java.util.Arrays;
 
-@Autonomous(name = "CLOSE RED Multiple Balls")
-public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
+@Autonomous(name = "FAR RED Multiple Balls")
+public class FAREREDScoreMultipleBalls extends LinearOpMode {
     public void runOpMode() {
-        Pose2d startingPos = new Pose2d(-52.5,46.5,deg(125));
+        Pose2d startingPos = new Pose2d(63,15,deg(180));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
         Launcher launcher = new Launcher(hardwareMap);
@@ -54,11 +54,10 @@ public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
                 new AngularVelConstraint(deg(180) // 180 deg per sec cap
                 )));
 
-
         Action goToGoal1 = drive.actionBuilder(startingPos)
-                .setTangent(deg(305))
-                .splineToConstantHeading(
-                        goalVector, deg(305))
+                .setTangent(deg(180))
+                .splineToLinearHeading(
+                        goalPos, deg(180))
                 .build();
 
         Action goToBall2 = drive.actionBuilder(goalPos)
@@ -262,7 +261,8 @@ public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
 
         waitForStart();
 
-            Actions.runBlocking(fullAction);
+        Actions.runBlocking(fullAction);
+
 
     }
 }

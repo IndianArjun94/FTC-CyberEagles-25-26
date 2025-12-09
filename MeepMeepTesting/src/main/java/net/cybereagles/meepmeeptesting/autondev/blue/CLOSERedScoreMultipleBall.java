@@ -27,15 +27,15 @@ public class CLOSERedScoreMultipleBall {
                 .build();
 
 //        Actions:
-        Pose2d startingPos = new Pose2d(63,15,deg(180));
+        Pose2d startingPos = new Pose2d(-52.5,46.5,deg(125));
         Pose2d goalPos = new Pose2d(-22.5, 14, deg(131));
         Vector2d goalVector = new Vector2d(-22.5, 14);
-        Pose2d ball2Pos = new Pose2d(-13, 30, deg(90));
-        Pose2d ball3Pos = new Pose2d(-13, 36, deg(90));
-        Pose2d ball4Pos = new Pose2d(-13, 41, deg(90));
-        Pose2d ball5Pos = new Pose2d(11.5, 29.5, deg(90));
-        Pose2d ball6Pos = new Pose2d(11.5, 34, deg(90));
-        Pose2d ball7Pos = new Pose2d(11.5, 38, deg(90));
+        Pose2d ball2Pos = new Pose2d(-13, 27.5, deg(90));
+        Pose2d ball3Pos = new Pose2d(-13, 32, deg(90));
+        Pose2d ball4Pos = new Pose2d(-13, 36.5, deg(90));
+        Pose2d ball5Pos = new Pose2d(11.5, 26.5, deg(90));
+        Pose2d ball6Pos = new Pose2d(11.5, 31, deg(90));
+        Pose2d ball7Pos = new Pose2d(11.5, 35.5, deg(90));
 
         final float launcherPower = 0.66f;
         final float sleepTime = 0.75f;
@@ -50,10 +50,11 @@ public class CLOSERedScoreMultipleBall {
                 new AngularVelConstraint(deg(180) // 180 deg per sec cap
                 )));
 
+
         Action goToGoal1 = myBot.getDrive().actionBuilder(startingPos)
-                .setTangent(deg(180))
+                .setTangent(deg(305))
                 .splineToLinearHeading(
-                        goalPos, deg(180))
+                        goalPos, deg(305))
                 .build();
 
         Action goToBall2 = myBot.getDrive().actionBuilder(goalPos)
