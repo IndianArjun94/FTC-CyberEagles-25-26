@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.auton.secondbot.test;
+package org.firstinspires.ftc.teamcode.auton.legacy_autons.secondbot.test;
 
-import static org.firstinspires.ftc.teamcode.auton.firstbot.Util.deg;
+import static org.firstinspires.ftc.teamcode.auton.Util.deg;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;

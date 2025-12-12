@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.auton.secondbot;
+package org.firstinspires.ftc.teamcode.auton.legacy_autons.secondbot;
 
-import static org.firstinspires.ftc.teamcode.auton.firstbot.Util.deg;
+import static org.firstinspires.ftc.teamcode.auton.Util.deg;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
@@ -13,14 +13,17 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.intake.Intake;
-import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loader.TripleBallQuadLoader;
+import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.intake.Intake;
+import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.launcher.Launcher;
+import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.loader.SingleBallLoader;
 
 import java.util.Arrays;
 
+@Disabled
 @Autonomous(name = "CLOSE RED Multiple Balls")
 public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
     public void runOpMode() {
@@ -28,7 +31,7 @@ public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
         Launcher launcher = new Launcher(hardwareMap);
-        TripleBallQuadLoader loader = new TripleBallQuadLoader(hardwareMap);
+        SingleBallLoader loader = new SingleBallLoader(hardwareMap);
         Intake intake = new Intake(hardwareMap, drive, telemetry);
 
         Pose2d goalPos = new Pose2d(-22.5, 14, deg(131));

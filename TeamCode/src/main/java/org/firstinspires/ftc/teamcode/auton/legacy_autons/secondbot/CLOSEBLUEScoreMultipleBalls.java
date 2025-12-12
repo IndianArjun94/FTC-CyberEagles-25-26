@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.auton.secondbot;
+package org.firstinspires.ftc.teamcode.auton.legacy_autons.secondbot;
 
-import static org.firstinspires.ftc.teamcode.auton.firstbot.Util.deg;
+import static org.firstinspires.ftc.teamcode.auton.Util.deg;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
@@ -17,34 +17,35 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.intake.Intake;
-import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loader.TripleBallQuadLoader;
+import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.intake.Intake;
+import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.launcher.Launcher;
+import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.loader.SingleBallLoader;
 
 import java.util.Arrays;
 
 @Disabled
-@Autonomous(name = "FAR BLUE Multiple Balls")
-public class FARBLUEScoreMultipleBalls extends LinearOpMode {
+@Autonomous(name = "CLOSE BLUE Multiple Balls")
+public class CLOSEBLUEScoreMultipleBalls extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startingPos = new Pose2d(63,-15,deg(180));
+        Pose2d startingPos = new Pose2d(-52.5,-46.5,deg(235));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
         Launcher launcher = new Launcher(hardwareMap);
-        TripleBallQuadLoader loader = new TripleBallQuadLoader(hardwareMap);
+        SingleBallLoader loader = new SingleBallLoader(hardwareMap);
         Intake intake = new Intake(hardwareMap, drive, telemetry);
 
         Pose2d goalPos = new Pose2d(-22.5, -14, deg(229));
         Vector2d goalVector = new Vector2d(-22.5, -14);
-        Pose2d ball2Pos = new Pose2d(-13, -30, deg(270));
-        Pose2d ball3Pos = new Pose2d(-13, -36, deg(270));
-        Pose2d ball4Pos = new Pose2d(-13, -41, deg(270));
-        Pose2d ball5Pos = new Pose2d(11.5, -29.5, deg(270));
-        Pose2d ball6Pos = new Pose2d(11.5, -34, deg(270));
-        Pose2d ball7Pos = new Pose2d(11.5, -38, deg(270));
+        Pose2d ball2Pos = new Pose2d(-13, -27.5, deg(270));
+        Pose2d ball3Pos = new Pose2d(-13, -32, deg(270));
+        Pose2d ball4Pos = new Pose2d(-13, -36.5, deg(270));
+        Pose2d ball5Pos = new Pose2d(11.5, -26.5, deg(270));
+        Pose2d ball6Pos = new Pose2d(11.5, -31, deg(270));
+        Pose2d ball7Pos = new Pose2d(11.5, -35.5, deg(270));
 
-        final float launcherPower = 0.69f;
+        final float launcherPower = 0.66f;
         final float sleepTime = 0.75f;
 
         MinVelConstraint slowVelConstraint = new MinVelConstraint(Arrays.asList(
@@ -57,10 +58,11 @@ public class FARBLUEScoreMultipleBalls extends LinearOpMode {
                 new AngularVelConstraint(deg(180) // 180 deg per sec cap
                 )));
 
+
         Action goToGoal1 = drive.actionBuilder(startingPos)
-                .setTangent(deg(160))
-                .splineTo(
-                        goalVector, deg(190))
+                .setTangent(deg(55))
+                .splineToConstantHeading(
+                        goalVector, deg(55))
                 .build();
 
         Action goToBall2 = drive.actionBuilder(goalPos)
@@ -139,7 +141,7 @@ public class FARBLUEScoreMultipleBalls extends LinearOpMode {
                 goToBall2,
 //                intake.stopActiveIntake(),
                 loader.stopSingleBallLoader(),
-                launcher.startLauncher(launcherPower),
+                launcher.startLauncher(launcherPower+0.035),
                 new ParallelAction(
                         goToGoal2,
                         new SequentialAction(
@@ -147,7 +149,7 @@ public class FARBLUEScoreMultipleBalls extends LinearOpMode {
                                 intake.stopActiveIntake()
                         )),
                 loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
+                new SleepAction(sleepTime+0.25),
                 loader.stopSingleBallLoader(),
                 launcher.stopLauncher()
         );
@@ -159,7 +161,7 @@ public class FARBLUEScoreMultipleBalls extends LinearOpMode {
                 goToBall3,
 //                intake.stopActiveIntake(),
                 loader.stopSingleBallLoader(),
-                launcher.startLauncher(launcherPower),
+                launcher.startLauncher(launcherPower+0.035),
                 new ParallelAction(
                         goToGoal3,
                         new SequentialAction(
@@ -167,7 +169,7 @@ public class FARBLUEScoreMultipleBalls extends LinearOpMode {
                                 intake.stopActiveIntake()
                         )),
                 loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
+                new SleepAction(sleepTime+0.25),
                 loader.stopSingleBallLoader(),
                 launcher.stopLauncher()
         );
@@ -207,7 +209,7 @@ public class FARBLUEScoreMultipleBalls extends LinearOpMode {
                                 intake.stopActiveIntake()
                         )),
                 loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
+                new SleepAction(sleepTime+0.25),
                 loader.stopSingleBallLoader(),
                 launcher.stopLauncher()
         );
@@ -227,7 +229,7 @@ public class FARBLUEScoreMultipleBalls extends LinearOpMode {
                                 intake.stopActiveIntake()
                         )),
                 loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
+                new SleepAction(sleepTime+0.25),
                 loader.stopSingleBallLoader(),
                 launcher.stopLauncher()
         );
@@ -247,7 +249,7 @@ public class FARBLUEScoreMultipleBalls extends LinearOpMode {
                                 intake.stopActiveIntake()
                         )),
                 loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
+                new SleepAction(sleepTime+0.25),
                 loader.stopSingleBallLoader(),
                 launcher.stopLauncher()
         );

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton.firstbot;
+package org.firstinspires.ftc.teamcode.auton;
 
 public class Util {
     public static double deg(double degrees) {

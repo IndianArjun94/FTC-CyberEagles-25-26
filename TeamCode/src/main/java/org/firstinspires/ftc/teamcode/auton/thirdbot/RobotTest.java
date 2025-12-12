@@ -11,26 +11,30 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.PIDFlyWheel;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loader.TripleBallQuadLoader;
 
-@Autonomous(name = "PID Launcher Test")
-public class PIDLauncherTest extends LinearOpMode {
+@Autonomous(name = "Robot Test")
+public class RobotTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        MecanumDrive mecanumDrive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         PIDFlyWheel launcher = new PIDFlyWheel(hardwareMap, telemetry);
+        TripleBallQuadLoader loader = new TripleBallQuadLoader(hardwareMap);
 
         Action runLauncher = new ParallelAction(
-                launcher.revLauncher(250),
-//                launcher.getRPM(),
-                new SequentialAction(
-                        new SleepAction(2000),
-                        launcher.stopLauncher()
-                )
+                launcher.revLauncher(250)
+        );
+
+        Action runLoader = new ParallelAction(
+                loader.start()
         );
 
         waitForStart();
 
-        Actions.runBlocking(runLauncher);
+        Actions.runBlocking(new ParallelAction(
+                runLoader,
+                new SleepAction(2),
+                runLauncher
+        ));
 
     }
 }
