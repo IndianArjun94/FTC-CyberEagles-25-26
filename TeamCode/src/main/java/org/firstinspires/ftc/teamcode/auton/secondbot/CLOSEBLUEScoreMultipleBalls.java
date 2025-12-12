@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton.firstbot.test;
+package org.firstinspires.ftc.teamcode.auton.secondbot;
 
 import static org.firstinspires.ftc.teamcode.auton.firstbot.Util.deg;
 
@@ -16,9 +16,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.firstbot.module.intake.Intake;
-import org.firstinspires.ftc.teamcode.auton.firstbot.module.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.firstbot.module.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.first_second_bot_modules.intake.Intake;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.first_second_bot_modules.loader.TripleBallQuadLoader;
 
 import java.util.Arrays;
 
@@ -31,7 +30,7 @@ public class CLOSEBLUEScoreMultipleBalls extends LinearOpMode {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
         Launcher launcher = new Launcher(hardwareMap);
-        SingleBallLoader loader = new SingleBallLoader(hardwareMap);
+        TripleBallQuadLoader loader = new TripleBallQuadLoader(hardwareMap);
         Intake intake = new Intake(hardwareMap, drive, telemetry);
 
         Pose2d goalPos = new Pose2d(-22.5, -14, deg(229));

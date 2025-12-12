@@ -1,12 +1,14 @@
-package org.firstinspires.ftc.teamcode.auton.seconndbot;
+package org.firstinspires.ftc.teamcode.auton.secondbot.test;
 
 import static org.firstinspires.ftc.teamcode.auton.firstbot.Util.deg;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
+@Disabled
 public class CLOSEBLUE9Ball extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

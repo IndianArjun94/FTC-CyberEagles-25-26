@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton.firstbot.test;
+package org.firstinspires.ftc.teamcode.auton.secondbot;
 
 import static org.firstinspires.ftc.teamcode.auton.firstbot.Util.deg;
 
@@ -16,30 +16,29 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.firstbot.module.intake.Intake;
-import org.firstinspires.ftc.teamcode.auton.firstbot.module.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.firstbot.module.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.first_second_bot_modules.intake.Intake;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.first_second_bot_modules.loader.TripleBallQuadLoader;
 
 import java.util.Arrays;
 
-@Autonomous(name = "FAR RED Multiple Balls")
-public class FAREREDScoreMultipleBalls extends LinearOpMode {
+@Autonomous(name = "CLOSE RED Multiple Balls")
+public class CLOSEREDScoreMultipleBalls extends LinearOpMode {
     public void runOpMode() {
-        Pose2d startingPos = new Pose2d(63,15,deg(180));
+        Pose2d startingPos = new Pose2d(-52.5,46.5,deg(125));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
         Launcher launcher = new Launcher(hardwareMap);
-        SingleBallLoader loader = new SingleBallLoader(hardwareMap);
+        TripleBallQuadLoader loader = new TripleBallQuadLoader(hardwareMap);
         Intake intake = new Intake(hardwareMap, drive, telemetry);
 
         Pose2d goalPos = new Pose2d(-22.5, 14, deg(131));
         Vector2d goalVector = new Vector2d(-22.5, 14);
-        Pose2d ball2Pos = new Pose2d(-13, 30, deg(90));
-        Pose2d ball3Pos = new Pose2d(-13, 36, deg(90));
-        Pose2d ball4Pos = new Pose2d(-13, 41, deg(90));
-        Pose2d ball5Pos = new Pose2d(11.5, 29.5, deg(90));
-        Pose2d ball6Pos = new Pose2d(11.5, 34, deg(90));
-        Pose2d ball7Pos = new Pose2d(11.5, 38, deg(90));
+        Pose2d ball2Pos = new Pose2d(-13, 27.5, deg(90));
+        Pose2d ball3Pos = new Pose2d(-13, 32, deg(90));
+        Pose2d ball4Pos = new Pose2d(-13, 36.5, deg(90));
+        Pose2d ball5Pos = new Pose2d(11.5, 26.5, deg(90));
+        Pose2d ball6Pos = new Pose2d(11.5, 31, deg(90));
+        Pose2d ball7Pos = new Pose2d(11.5, 35.5, deg(90));
 
         final float launcherPower = 0.66f;
         final float sleepTime = 0.75f;
@@ -54,10 +53,11 @@ public class FAREREDScoreMultipleBalls extends LinearOpMode {
                 new AngularVelConstraint(deg(180) // 180 deg per sec cap
                 )));
 
+
         Action goToGoal1 = drive.actionBuilder(startingPos)
-                .setTangent(deg(180))
-                .splineToLinearHeading(
-                        goalPos, deg(180))
+                .setTangent(deg(305))
+                .splineToConstantHeading(
+                        goalVector, deg(305))
                 .build();
 
         Action goToBall2 = drive.actionBuilder(goalPos)
@@ -136,7 +136,7 @@ public class FAREREDScoreMultipleBalls extends LinearOpMode {
                 goToBall2,
 //                intake.stopActiveIntake(),
                 loader.stopSingleBallLoader(),
-                launcher.startLauncher(launcherPower),
+                launcher.startLauncher(launcherPower+0.035),
                 new ParallelAction(
                         goToGoal2,
                         new SequentialAction(
@@ -144,7 +144,7 @@ public class FAREREDScoreMultipleBalls extends LinearOpMode {
                                 intake.stopActiveIntake()
                         )),
                 loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
+                new SleepAction(sleepTime+0.25),
                 loader.stopSingleBallLoader(),
                 launcher.stopLauncher()
         );
@@ -156,7 +156,7 @@ public class FAREREDScoreMultipleBalls extends LinearOpMode {
                 goToBall3,
 //                intake.stopActiveIntake(),
                 loader.stopSingleBallLoader(),
-                launcher.startLauncher(launcherPower),
+                launcher.startLauncher(launcherPower+0.035),
                 new ParallelAction(
                         goToGoal3,
                         new SequentialAction(
@@ -164,7 +164,7 @@ public class FAREREDScoreMultipleBalls extends LinearOpMode {
                                 intake.stopActiveIntake()
                         )),
                 loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
+                new SleepAction(sleepTime+0.25),
                 loader.stopSingleBallLoader(),
                 launcher.stopLauncher()
         );
@@ -204,7 +204,7 @@ public class FAREREDScoreMultipleBalls extends LinearOpMode {
                                 intake.stopActiveIntake()
                         )),
                 loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
+                new SleepAction(sleepTime+0.25),
                 loader.stopSingleBallLoader(),
                 launcher.stopLauncher()
         );
@@ -224,7 +224,7 @@ public class FAREREDScoreMultipleBalls extends LinearOpMode {
                                 intake.stopActiveIntake()
                         )),
                 loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
+                new SleepAction(sleepTime+0.25),
                 loader.stopSingleBallLoader(),
                 launcher.stopLauncher()
         );
@@ -244,7 +244,7 @@ public class FAREREDScoreMultipleBalls extends LinearOpMode {
                                 intake.stopActiveIntake()
                         )),
                 loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
+                new SleepAction(sleepTime+0.25),
                 loader.stopSingleBallLoader(),
                 launcher.stopLauncher()
         );
@@ -262,7 +262,6 @@ public class FAREREDScoreMultipleBalls extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(fullAction);
-
 
     }
 }

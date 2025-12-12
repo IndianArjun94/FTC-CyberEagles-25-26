@@ -11,8 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.firstbot.module.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.firstbot.module.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.first_second_bot_modules.loader.TripleBallQuadLoader;
 
 @Autonomous(name = "FAR RED Single Ball")
 public class FARREDScoreSingleBall extends LinearOpMode {
@@ -23,7 +22,7 @@ public class FARREDScoreSingleBall extends LinearOpMode {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
         Launcher launcher = new Launcher(hardwareMap);
-        SingleBallLoader loader = new SingleBallLoader(hardwareMap);
+        TripleBallQuadLoader loader = new TripleBallQuadLoader(hardwareMap);
 
         Action goToGoal = drive.actionBuilder(startingPos)
                 .setTangent(deg(160))

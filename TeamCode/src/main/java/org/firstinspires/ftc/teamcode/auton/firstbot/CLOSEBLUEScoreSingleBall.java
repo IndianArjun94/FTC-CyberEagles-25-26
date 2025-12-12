@@ -12,8 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.firstbot.module.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.firstbot.module.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.first_second_bot_modules.loader.TripleBallQuadLoader;
 
 @Autonomous(name = "CLOSE BLUE Single Ball")
 public class CLOSEBLUEScoreSingleBall extends LinearOpMode {
@@ -24,7 +23,7 @@ public class CLOSEBLUEScoreSingleBall extends LinearOpMode {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
         Launcher launcher = new Launcher(hardwareMap);
-        SingleBallLoader loader = new SingleBallLoader(hardwareMap);
+        TripleBallQuadLoader loader = new TripleBallQuadLoader(hardwareMap);
 
         Action goToGoal = drive.actionBuilder(startingPos)
                 .setTangent(deg(55))
