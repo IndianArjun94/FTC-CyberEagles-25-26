@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.thirdbot.first_second_bot_modules.loader.TripleBallQuadLoader;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loader.TripleBallQuadLoader;
 
 @Autonomous(name = "FAR BLUE Single Ball")
 public class FARBLUEScoreSingleBall extends LinearOpMode {
