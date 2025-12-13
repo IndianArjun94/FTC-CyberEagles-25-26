@@ -1,12 +1,10 @@
-package net.cybereagles.meepmeeptesting.autondev.blue;
+package net.cybereagles.meepmeeptesting.autondev.blue.legacy_autons_meepmeep;
 
 import static net.cybereagles.meepmeeptesting.Util.deg;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
