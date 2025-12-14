@@ -22,13 +22,13 @@ public class Intake {
     private MecanumDrive mecanumDrive;
     private Telemetry telemetry;
 
-    public Intake(HardwareMap hardwareMap, MecanumDrive mecanumDrive, Telemetry telemetry) {
-        this.intakeMotor = hardwareMap.get(DcMotorEx.class, "intake1");
-        this.intakeMotor2 = hardwareMap.get(DcMotor.class, "intake2");
+    public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
+//        this.intakeMotor2 = hardwareMap.get(DcMotor.class, "intake2");
         this.intakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        this.intakeMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        this.intakeMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.mecanumDrive = mecanumDrive;
+//        this.intakeMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        this.intakeMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
+//        this.mecanumDrive = mecanumDrive;
         this.telemetry = telemetry;
     }
 
@@ -37,7 +37,7 @@ public class Intake {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             intakeMotor.setPower(0.8);
-            intakeMotor2.setPower(0.8);
+//            intakeMotor2.setPower(0.8);
             return false;
         }
     }
@@ -47,7 +47,7 @@ public class Intake {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             intakeMotor.setPower(0);
-            intakeMotor2.setPower(0);
+//            intakeMotor2.setPower(0);
             return false;
         }
     }

@@ -1,4 +1,4 @@
-package net.cybereagles.meepmeeptesting.autondev.blue;
+package net.cybereagles.meepmeeptesting.autondev.blue.legacy_autons_meepmeep;
 
 import static net.cybereagles.meepmeeptesting.Util.deg;
 
