@@ -18,11 +18,11 @@ public class TripleBallQuadLoader {
     public TripleBallQuadLoader(HardwareMap hardwareMap) {
         this.frontLeftLoadServo = hardwareMap.get(CRServo.class, "frontLeftLoad");
         this.frontRightLoadServo = hardwareMap.get(CRServo.class, "frontRightLoad");
-        this.backLeftLoadServo = hardwareMap.get(CRServo.class, "frontLeftLoad");
-        this.backRightLoadServo = hardwareMap.get(CRServo.class, "frontRightLoad");
+        this.backLeftLoadServo = hardwareMap.get(CRServo.class, "backLeftLoad");
+        this.backRightLoadServo = hardwareMap.get(CRServo.class, "backRightLoad");
 
-        this.frontLeftLoadServo.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.backLeftLoadServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.frontRightLoadServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.backRightLoadServo.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public class StartLoaderAction implements Action {
