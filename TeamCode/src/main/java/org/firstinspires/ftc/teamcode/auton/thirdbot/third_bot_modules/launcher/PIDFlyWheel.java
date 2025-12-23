@@ -21,13 +21,13 @@ public class PIDFlyWheel {
     }
 
     public class RevLauncherAction implements Action {
-        public int targetRPM = 3000;
+        public int targetRPM;
         public final int MAX_RPM = 312;
-        public final double TICKS_PER_REVOLUTION = 537.6;
+        public final double TICKS_PER_REVOLUTION = 537.6; // 28?
         public final double MAX_TPS = (MAX_RPM*TICKS_PER_REVOLUTION)/60;
         public final double P = 0.95; // TODO: Tune these values
-        public final double I = 0.015; // TODO: Tune these values
-        public final double D = 0.15;
+        public final double I = 0.006; // TODO: Tune these values
+        public final double D = 0.4;
 
         private double prevError;
         private double error;
@@ -58,10 +58,10 @@ public class PIDFlyWheel {
 
             telemetry.addData("output (power %): ", output/MAX_TPS);
             telemetry.addData("err (rpm): ", error*60/TICKS_PER_REVOLUTION);
-//            telemetry.addData("P: ", proportional*P);
-//            telemetry.addData("I: ", integral*I);
-//            telemetry.addData("D: ", derivative*D);
-//            telemetry.addData("dt: ", time-prevTime);
+            telemetry.addData("P: ", proportional*P);
+            telemetry.addData("I: ", integral*I);
+            telemetry.addData("D: ", derivative*D);
+            telemetry.addData("dt: ", time-prevTime);
             telemetry.addData("vel (rpm): ", launcherMotor.getVelocity()*60/TICKS_PER_REVOLUTION);
 
 
