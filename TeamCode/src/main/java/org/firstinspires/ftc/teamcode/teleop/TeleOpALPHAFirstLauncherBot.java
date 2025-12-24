@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loader.TripleBallQuadLoader;
 
 import org.firstinspires.ftc.teamcode.module.AprilTagModule;
 import org.firstinspires.ftc.teamcode.module.ObeliskPattern;
@@ -29,8 +30,10 @@ public class  TeleOpALPHAFirstLauncherBot extends OpMode {
     private static double SHOOTING_WHEEL_MULTIPLIER = 0.18f;
     private static double launcherPowerBoost = 0.0;
     private static boolean intakeActive = false;
-    private static CRServo leftLoadServo;
-    private static CRServo rightLoadServo;
+    private static CRServo leftFrontLoadServo;
+    private static CRServo rightFrontLoadServo;
+    private static CRServo rightBackLoadServo;
+    private static CRServo leftBackLoadServo;
     private static DcMotor launcherMotor;
     private static DcMotor intakeMotor1;
     private static DcMotor intakeMotor2;
@@ -53,11 +56,15 @@ public class  TeleOpALPHAFirstLauncherBot extends OpMode {
         intakeMotor1 = hardwareMap.get(DcMotor.class, "intake1");
         intakeMotor2 = hardwareMap.get(DcMotor.class, "intake2");
 
-        leftLoadServo = hardwareMap.get(CRServo.class, "leftLoad");
-        rightLoadServo = hardwareMap.get(CRServo.class, "rightLoad");
+        leftFrontLoadServo = hardwareMap.get(CRServo.class, "frontLeftLoad");
+        rightFrontLoadServo = hardwareMap.get(CRServo.class, "frontRightLoad");
+        rightBackLoadServo = hardwareMap.get(CRServo.class, "backRightLoad");
+        leftBackLoadServo = hardwareMap.get(CRServo.class, "backLeftLoad");
+
 
         launcherMotor = hardwareMap.get(DcMotor.class, "launcher");
-        leftLoadServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontLoadServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBackLoadServo.setDirection(DcMotorSimple.Direction.REVERSE);
 
         rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -144,18 +151,22 @@ public class  TeleOpALPHAFirstLauncherBot extends OpMode {
         }
 
         if (launcherSequenceStarted && System.currentTimeMillis() - launcherSequenceStartTime >= 3000 && !launcherSequenceLaunched) {
-            leftLoadServo.setPower(1);
-            rightLoadServo.setPower(1);
-            intakeMotor2.setPower(1);
+            leftFrontLoadServo.setPower(1);
+            rightFrontLoadServo.setPower(1);
+            rightBackLoadServo.setPower(1);
+            leftBackLoadServo.setPower(1);
+            intakeMotor1.setPower(1);
             launcherSequenceLaunched = true;
             launcherSequenceLaunchTime = System.currentTimeMillis();
         }
 
         if (launcherSequenceLaunched && System.currentTimeMillis() - launcherSequenceLaunchTime >= 1750) {
             launcherMotor.setPower(0);
-            leftLoadServo.setPower(0);
-            rightLoadServo.setPower(0);
-            intakeMotor2.setPower(0);
+            leftFrontLoadServo.setPower(0);
+            rightFrontLoadServo.setPower(0);
+            rightBackLoadServo.setPower(0);
+            leftBackLoadServo.setPower(0);
+            intakeMotor1.setPower(0);
             launcherSequenceStarted = false;
             launcherSequenceLaunched = false;
             launcherSequenceLaunchTime = 0;
