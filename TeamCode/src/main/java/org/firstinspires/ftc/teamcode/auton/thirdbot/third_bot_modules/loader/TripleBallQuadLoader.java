@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class TripleBallQuadLoader {
+public class  TripleBallQuadLoader {
 
     private CRServo frontLeftLoadServo;
     private CRServo frontRightLoadServo;

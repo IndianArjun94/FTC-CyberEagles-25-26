@@ -21,33 +21,36 @@ import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loader.Tr
 public class RobotTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startingPos = new Pose2d(0,0,deg(0));
-        //MecanumDrive drive = new MecanumDrive(hardwareMap,startingPos);
         PIDFlyWheel launcher = new PIDFlyWheel(hardwareMap, telemetry);
         TripleBallQuadLoader loader = new TripleBallQuadLoader(hardwareMap);
         Intake intake = new Intake(hardwareMap, telemetry);
-//        Action runLauncher = new ParallelAction(
-//                launcher.revLauncher(250)
-//        );
-        Action runIntake = new ParallelAction(
-                intake.startActiveIntake()
-        );
-        Action stopIntake = new ParallelAction(
-                intake.stopActiveIntake()
-        );
 
-        Action runLoader = new ParallelAction(
-                loader.start()
-        );
+        Action runLauncher = launcher.revLauncher(200);
+
+        Action stopLauncher = launcher.stopLauncher();
+
+        Action runIntake = intake.startActiveIntake();
+
+        Action stopIntake = intake.stopActiveIntake();
+
+        Action runLoader = loader.start();
+
+        Action stopLoader = loader.stop();
 
         waitForStart();
 
-        Actions.runBlocking(new SequentialAction(
-                runIntake,
-                runLoader,
-                new SleepAction(30),
-                stopIntake
-        ));
+        Actions.runBlocking(
+                        new SequentialAction(
+                                new SleepAction(2),
+                                loader.start(),
+                                runIntake,
+                                runLauncher,
+//                                new SleepAction(3),
+                                new SleepAction(3000)
+//                                stopLoader,
+//                                stopLauncher
+                        )
+        );
 
     }
 }

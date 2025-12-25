@@ -36,7 +36,7 @@ public class Intake {
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            intakeMotor.setPower(0.8);
+            intakeMotor.setPower(0.5);
 //            intakeMotor2.setPower(0.8);
             return false;
         }
