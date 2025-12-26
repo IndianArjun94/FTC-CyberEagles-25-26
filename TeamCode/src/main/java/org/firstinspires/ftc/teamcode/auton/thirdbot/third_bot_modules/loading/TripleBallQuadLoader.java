@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loader;
+package org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loading;
 
 import androidx.annotation.NonNull;
 
