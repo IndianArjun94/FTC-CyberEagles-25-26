@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Stopper {
     private Servo stopeprServo;
 
-    private final double STOPPING_POS = 1.0; // straight up
+    private final double STOPPING_POS = 0.2; // straight up
     private final double OPEN_POSITION = 0.6; // straight right
     private Telemetry telemetry;
 

@@ -38,45 +38,51 @@ public class RobotTest extends LinearOpMode {
 
         waitForStart();
 
-        Actions.runBlocking(new ParallelAction(
-                new ParallelAction(
-                        launcher.revLauncher(165),
-                        stopper.initiate(),
-                        loader.start(),
-                        intake.start(),
-                        lifter.reset()
-                ),
-
-                new SequentialAction(
-                        new SleepAction(6),
-
-                        stopper.open(),
-
-                        new SleepAction(0.8),
-                        lifter.lift(),
-                        new SleepAction(0.8),
-                        lifter.reset(),
-
-                        new SleepAction(0.8),
-                        lifter.lift(),
-                        new SleepAction(0.8),
-                        lifter.reset(),
-
-                        new SleepAction(0.8),
-                        lifter.lift(),
-                        new SleepAction(0.8),
-                        lifter.reset(),
-
-                        new SleepAction(0.8 ),
-
-                        new ParallelAction(
-                                launcher.stopLauncher(),
-                                stopper.initiate(),
-                                loader.stop(),
-                                intake.stop()
-                        )
-                )
+        Actions.runBlocking(new SequentialAction(
+                stopper.initiate(),
+                new SleepAction(1),
+                stopper.open(),
+                new SleepAction(0.25)
         ));
+
+//        Actions.runBlocking(new ParallelAction(
+//                new ParallelAction(
+//                        launcher.revLauncher(165),
+//                        stopper.initiate(),
+//                        intake.start(),
+//                        lifter.reset()
+//                ),
+//
+//                new SequentialAction(
+//                        new SleepAction(1),
+//
+//                        stopper.open(),
+//
+//                        new SleepAction(0.8),
+//                        lifter.lift(),
+//                        new SleepAction(0.8),
+//                        lifter.reset(),
+//
+//                        new SleepAction(0.8),
+//                        lifter.lift(),
+//                        new SleepAction(0.8),
+//                        lifter.reset(),
+//
+//                        new SleepAction(0.8),
+//                        lifter.lift(),
+//                        new SleepAction(0.8),
+//                        lifter.reset(),
+//
+//                        new SleepAction(0.8 ),
+//
+//                        new ParallelAction(
+//                                launcher.stopLauncher(),
+//                                stopper.initiate(),
+//                                loader.stop(),
+//                                intake.stop()
+//                        )
+//                )
+//        ));
 
     }
 }
