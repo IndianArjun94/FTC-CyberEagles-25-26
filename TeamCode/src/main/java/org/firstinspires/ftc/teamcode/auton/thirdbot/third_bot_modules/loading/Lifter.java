@@ -13,7 +13,7 @@ public class Lifter {
     private Servo lifterServo;
 
     private final double UP_POSITION = 0.27; // straight up
-    private final double DOWN_POSITION = 0.5; // straight right
+    private final double DOWN_POSITION = 0.55; // straight right
     private Telemetry telemetry;
 
     public Lifter(HardwareMap hardwareMap, Telemetry telemetry) {

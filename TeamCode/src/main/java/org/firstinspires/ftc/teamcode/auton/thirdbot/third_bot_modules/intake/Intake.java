@@ -8,7 +8,6 @@ import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -84,11 +83,11 @@ public class Intake {
         }
     }
 
-    public Action startActiveIntake() {
+    public Action start() {
         return new StartActiveIntakeAction();
     }
 
-    public Action stopActiveIntake() {
+    public Action stop() {
         return new StopActiveIntakeAction();
     }
 

@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.intake.Intake;
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.PIDFlyWheel;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.Stopper;
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loading.Lifter;
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loading.TripleBallQuadLoader;
 
@@ -33,38 +34,49 @@ public class RobotTest extends LinearOpMode {
         TripleBallQuadLoader loader = new TripleBallQuadLoader(hardwareMap);
         Intake intake = new Intake(hardwareMap, telemetry);
         Lifter lifter = new Lifter(hardwareMap, telemetry);
-
-        Action runLauncher = launcher.revLauncher(200);
-
-        Action stopLauncher = launcher.stopLauncher();
-
-        Action runIntake = intake.startActiveIntake();
-
-        Action stopIntake = intake.stopActiveIntake();
-
-        Action runLoader = loader.start();
-
-        Action stopLoader = loader.stop();
+        Stopper stopper = new Stopper(hardwareMap, telemetry);
 
         waitForStart();
 
-        Actions.runBlocking(
+        Actions.runBlocking(new ParallelAction(
                 new ParallelAction(
-                        launcher.revLauncher(180),
+                        launcher.revLauncher(165),
+                        stopper.initiate(),
+                        loader.start(),
+                        intake.start(),
+                        lifter.reset()
+                ),
 
-                        new SequentialAction(
-//                                new ParallelAction(
-//                                        launcher.revLauncher(200),
-//                                ),
-                                new SleepAction(2),
-                                lifter.lift(),
-                                new SleepAction(2),
-                                lifter.reset(),
+                new SequentialAction(
+                        new SleepAction(6),
+
+                        stopper.open(),
+
+                        new SleepAction(0.8),
+                        lifter.lift(),
+                        new SleepAction(0.8),
+                        lifter.reset(),
+
+                        new SleepAction(0.8),
+                        lifter.lift(),
+                        new SleepAction(0.8),
+                        lifter.reset(),
+
+                        new SleepAction(0.8),
+                        lifter.lift(),
+                        new SleepAction(0.8),
+                        lifter.reset(),
+
+                        new SleepAction(0.8 ),
+
+                        new ParallelAction(
                                 launcher.stopLauncher(),
-                                new SleepAction(0.5)
+                                stopper.initiate(),
+                                loader.stop(),
+                                intake.stop()
                         )
                 )
-        );
+        ));
 
     }
 }

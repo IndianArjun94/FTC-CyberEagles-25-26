@@ -12,8 +12,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Stopper {
     private Servo stopeprServo;
 
-    private final double UP_POSITION = 0.27; // straight up
-    private final double DOWN_POSITION = 0.5; // straight right
+    private final double STOPPING_POS = 1.0; // straight up
+    private final double OPEN_POSITION = 0.6; // straight right
     private Telemetry telemetry;
 
     public Stopper(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -24,7 +24,7 @@ public class Stopper {
     public class Stop implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            stopeprServo.setPosition(UP_POSITION);
+            stopeprServo.setPosition(STOPPING_POS);
             return false;
         }
     }
@@ -32,10 +32,10 @@ public class Stopper {
     public class Return implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            stopeprServo.setPosition(DOWN_POSITION);
+            stopeprServo.setPosition(OPEN_POSITION);
             return false;
         }
     }
-    public Action reset(){return new Return();}
-    public Action stop(){return new Stop();}
+    public Action open(){return new Return();}
+    public Action initiate(){return new Stop();}
 }
