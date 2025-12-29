@@ -146,8 +146,11 @@ public class TeleOpALPHAMeet3 extends OpMode {
         }
 
         if (intakeActive && !launching) {
-            intake.setPower(1);
+            intake.setPower(0.9);
             loader.start();
+        } else if (!launching) {
+            intake.setPower(0);
+            loader.stop();
         } else {
             intake.setPower(0);
         }
@@ -167,24 +170,29 @@ public class TeleOpALPHAMeet3 extends OpMode {
                 stopper.open();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if (launchingStage == 2 && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
+            } else if ((launchingStage == 2 || launchingStage == 6 || launchingStage == 10) && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
                 lifter.lift();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if (launchingStage == 3 && System.currentTimeMillis()-previousLaunchingStageTime >= 500) {
+            } else if ((launchingStage == 3 || launchingStage == 7 || launchingStage == 11) && System.currentTimeMillis()-previousLaunchingStageTime >= 500) {
                 lifter.reset();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if (launchingStage == 4 && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
+            } else if ((launchingStage == 4 || launchingStage == 8) && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
                 loader.start();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if (launchingStage == 5 && System.currentTimeMillis()-previousLaunchingStageTime >= 1000) {
-
+            } else if ((launchingStage == 5 || launchingStage == 9) && System.currentTimeMillis()-previousLaunchingStageTime >= 1000) {
+                loader.stop();
+                previousLaunchingStageTime = System.currentTimeMillis();
+                launchingStage++;
+            } else if (launchingStage == 12 && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
+                stopper.close();
+                launching = false;
+                launchingStage = 1;
             }
-            stopperOpenedTime = System.currentTimeMillis();
-            if (System.currentTimeMillis() - stopperOpenedTime)
-            lifter.lift();
+        } else {
+            stopper.close();
         }
 
 //        Camera Apriltag Detection
