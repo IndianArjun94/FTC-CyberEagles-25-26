@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.teleop.modules;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class PIDFlyWheelTeleOp {
-    public int targetRPM;
+    public int targetRPM = 175;
     public final int MAX_RPM = 312;
     public final double TICKS_PER_REVOLUTION = 537.6; // 28?
     public final double MAX_TPS = (MAX_RPM * TICKS_PER_REVOLUTION) / 60;
@@ -24,9 +25,8 @@ public class PIDFlyWheelTeleOp {
 
     private Telemetry telemetry;
 
-    public PIDFlyWheelTeleOp(int targetRPM, DcMotorEx launcherMotor, Telemetry telemetry) {
-        this.targetRPM = targetRPM;
-        this.launcherMotor = launcherMotor;
+    public PIDFlyWheelTeleOp(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.launcherMotor = hardwareMap.get(DcMotorEx.class, "launcher");
         this.telemetry = telemetry;
     }
 
