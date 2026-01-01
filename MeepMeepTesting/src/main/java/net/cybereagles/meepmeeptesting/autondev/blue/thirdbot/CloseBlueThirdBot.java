@@ -53,109 +53,77 @@ public class CloseBlueThirdBot {
                     )));
 
 
-            Action goToGoal1 = drive.getDrive().actionBuilder(startingPos)
-                    .setTangent(deg(55))
-                    .splineToConstantHeading(
-                            goalVector, deg(55))
-                    .build();
+        Action goToGoal1 = drive.getDrive().actionBuilder(startingPos)
+                .setTangent(deg(55))
+                .splineToConstantHeading(
+                        goalVector, deg(55))
+                .build();
 
-            Action trip1 = drive.getDrive().actionBuilder(goalPos)
-                    .setTangent(deg(0))
-                    .splineToLinearHeading(trip1pos, deg(270), slowVelConstraint)
-                    .build();
+        Action trip1 = drive.getDrive().actionBuilder(goalPos)
+                .setTangent(deg(0))
+                .splineToLinearHeading(trip1pos, deg(270), slowVelConstraint)
+                .build();
 
-            Action goToGoal2 = drive.getDrive().actionBuilder(trip1pos)
-                    .setTangent(deg(90))
-                    .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
-                    .build();
+        Action goToGoal2 = drive.getDrive().actionBuilder(trip1pos)
+                .setTangent(deg(90))
+                .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
+                .build();
 
-            Action trip2 = drive.getDrive().actionBuilder(goalPos)
-                    .setTangent(deg(0))
-                    .splineToLinearHeading(trip2pos, deg(270), slowVelConstraint)
-                    .build();
+        Action trip2 = drive.getDrive().actionBuilder(goalPos)
+                .setTangent(deg(0))
+                .splineToLinearHeading(trip2pos, deg(270), slowVelConstraint)
+                .build();
 
-            Action goToGoal3 = drive.getDrive().actionBuilder(trip2pos)
-                    .setTangent(deg(90))
-                    .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
-                    .build();
+        Action goToGoal3 = drive.getDrive().actionBuilder(trip2pos)
+                .setTangent(deg(90))
+                .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
+                .build();
 
-            Action trip3 = drive.getDrive().actionBuilder(goalPos)
-                    .setTangent(deg(0))
-                    .splineToLinearHeading(trip3pos, deg(270), slowVelConstraint)
-                    .build();
+        Action trip3 = drive.getDrive().actionBuilder(goalPos)
+                .setTangent(deg(0))
+                .splineToLinearHeading(trip3pos, deg(270), slowVelConstraint)
+                .build();
 
-            Action goToGoal4 = drive.getDrive().actionBuilder(trip3pos)
-                    .setTangent(deg(90))
-                    .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
-                    .build();
+        Action goToGoal4 = drive.getDrive().actionBuilder(trip3pos)
+                .setTangent(deg(90))
+                .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
+                .build();
 
-            Action threeBall1 = new SequentialAction(
-                    //launcher.startLauncher(launcherPower-0.05),
-                    goToGoal1,
-                    //loader.startSingleBallLoader(),
-                    new SleepAction(sleepTime + 1.5)
-                    //loader.stopSingleBallLoader(),
-                    //launcher.stopLauncher()
-            );
+        Action threeBall1 = new SequentialAction(
+                new ParallelAction(
+                        goToGoal1,
+                new SleepAction(5)
+        ));
 
-            Action threeBall2 = new SequentialAction(
-                    //  intake.startActiveIntake(),
-                    //  launcher.ejectLauncher(),
-                    trip1,
-//                intake.stopActiveIntake(),
-                    //   loader.stopSingleBallLoader(),
-                    //    launcher.startLauncher(launcherPower+0.035),
-                    new ParallelAction(
-                            goToGoal2,
-                            new SequentialAction(
-                                    new SleepAction(0.3)
-                                    //  intake.stopActiveIntake()
-                            )),
-                    //         loader.startSingleBallLoader(),
-                    new SleepAction(sleepTime + 1.5)
-                    //     loader.stopSingleBallLoader(),
-                    //   launcher.stopLauncher()
-            );
+        Action threeBall2 = new SequentialAction(
+                new ParallelAction(
+                        trip1),
 
-            Action threeBall3 = new SequentialAction(
-                    //   intake.startActiveIntake(),
-                    //   launcher.ejectLauncher(),
+                new ParallelAction(
+                        goToGoal2,
 
-                    trip2,
-//                intake.stopActiveIntake(),
-                    //        loader.stopSingleBallLoader(),
-                    //       launcher.startLauncher(launcherPower+0.035),
-                    new ParallelAction(
-                            goToGoal3,
-                            new SequentialAction(
-                                    new SleepAction(0.3)
-                                    //    intake.stopActiveIntake()
-                            )),
-                    //  loader.startSingleBallLoader(),
-                    new SleepAction(sleepTime + 1.5)
-                    //  loader.stopSingleBallLoader(),
-                    //   launcher.stopLauncher()
-            );
+                new SleepAction(5)
+        ));
 
-            Action threeBall4 = new SequentialAction(
-                    //    intake.startActiveIntake(),
-                    //   launcher.ejectLauncher(),
+        Action threeBall3 = new SequentialAction(
+                new ParallelAction(
+                        trip2),
 
-                    trip3,
-//                intake.stopActiveIntake(),
-                    //    loader.stopSingleBallLoader(),
-                    //    launcher.startLauncher(launcherPower),
-                    new ParallelAction(
-                            goToGoal4,
-                            new SequentialAction(
-                                    new SleepAction(0.3)
-                                    //    intake.stopActiveIntake()
-                            )),
-                    // loader.startSingleBallLoader(),
-                    new SleepAction(sleepTime+1.5)
-                    //  loader.stopSingleBallLoader(),
-                    //  launcher.stopLauncher()
-            );
+                new ParallelAction(
+                        goToGoal3,
+
+                new SleepAction(5)
+        ));
+
+        Action threeBall4 = new SequentialAction(
+                new ParallelAction(
+                        trip3),
+
+                new ParallelAction(
+                        goToGoal4,
+
+                new SleepAction(5)
+        ));
 
 
             Action fullAction = new SequentialAction(
