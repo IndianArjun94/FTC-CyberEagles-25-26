@@ -16,9 +16,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.intake.Intake;
-import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.intake.Intake;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loading.TripleBallQuadLoader;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.PIDFlyWheel;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.Stopper;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loading.Lifter;
 
 import java.util.Arrays;
 
@@ -27,13 +29,16 @@ public class CLOSEBLUE_12 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        //Making the modules and startingPos
         Pose2d startingPos = new Pose2d(-52.5,-46.5,deg(235));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
-        Launcher launcher = new Launcher(hardwareMap);
-        SingleBallLoader loader = new SingleBallLoader(hardwareMap);
-        Intake intake = new Intake(hardwareMap, drive, telemetry);
-
+        PIDFlyWheel launcher = new PIDFlyWheel(hardwareMap, telemetry);
+        TripleBallQuadLoader loader = new TripleBallQuadLoader(hardwareMap);
+        Intake intake = new Intake(hardwareMap, telemetry);
+        Stopper stopper = new Stopper(hardwareMap, telemetry);
+        Lifter lifter = new Lifter(hardwareMap, telemetry);
+        //Ball Positions
         Pose2d goalPos = new Pose2d(-22.5, -14, deg(229));
         Vector2d goalVector = new Vector2d(-22.5, -14);
         //Pose2d ball2Pos = new Pose2d(-13, -27.5, deg(270));
@@ -43,8 +48,8 @@ public class CLOSEBLUE_12 extends LinearOpMode {
 //        Pose2d ball6Pos = new Pose2d(11.5, -31, deg(270));
         Pose2d trip2pos = new Pose2d(11.5, -35.5, deg(270));
         Pose2d trip3pos = new Pose2d(11.5, -35.5, deg(270));
-
-        final float launcherPower = 0.66f;
+        //Constraints
+        final int launcherPower = 170;
         final float sleepTime = 0.75f;
 
         MinVelConstraint slowVelConstraint = new MinVelConstraint(Arrays.asList(
@@ -56,8 +61,7 @@ public class CLOSEBLUE_12 extends LinearOpMode {
                 new TranslationalVelConstraint(25), // 15 in. per sec cap
                 new AngularVelConstraint(deg(180) // 180 deg per sec cap
                 )));
-
-
+        //moving actions
         Action goToGoal1 = drive.actionBuilder(startingPos)
                 .setTangent(deg(55))
                 .splineToConstantHeading(
@@ -93,77 +97,121 @@ public class CLOSEBLUE_12 extends LinearOpMode {
                 .setTangent(deg(90))
                 .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
                 .build();
-
+        //actions with shooting+moving
         Action threeBall1 = new SequentialAction(
-                launcher.startLauncher(launcherPower-0.05),
+                new ParallelAction(
                 goToGoal1,
-                loader.startSingleBallLoader(),
-                new SleepAction(sleepTime+0.5),
-                loader.stopSingleBallLoader(),
-                launcher.stopLauncher()
+                stopper.open(),
+                loader.start()),
+                new SleepAction(0.4),
+                loader.stop(),
+                lifter.lift(),
+                new SleepAction(0.4),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(0.4),
+                loader.stop(),
+                lifter.lift(),
+                new SleepAction(0.4),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(0.4),
+                loader.stop(),
+                lifter.lift(),
+                new SleepAction(0.4),
+                lifter.reset()
         );
 
         Action threeBall2 = new SequentialAction(
-                intake.startActiveIntake(),
-                launcher.ejectLauncher(),
-                trip1,
-//                intake.stopActiveIntake(),
-                loader.stopSingleBallLoader(),
-                launcher.startLauncher(launcherPower+0.035),
                 new ParallelAction(
-                        goToGoal2,
-                        new SequentialAction(
-                                new SleepAction(0.3),
-                                intake.stopActiveIntake()
-                        )),
-                loader.startSingleBallLoader(),
-                new SleepAction(sleepTime+0.25),
-                loader.stopSingleBallLoader(),
-                launcher.stopLauncher()
+                stopper.initiate(),
+                intake.start(),
+                loader.start(),
+                trip1),
+
+                new ParallelAction(
+                goToGoal2,
+                loader.stop(),
+                stopper.open(),
+                intake.stop()),
+
+                lifter.lift(),
+                new SleepAction(0.3),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(0.2),
+                loader.stop(),
+                lifter.lift(),
+                new SleepAction(0.3),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(0.2),
+                loader.stop(),
+                lifter.lift(),
+                new SleepAction(0.3),
+                lifter.reset()
         );
 
         Action threeBall3 = new SequentialAction(
-                intake.startActiveIntake(),
-                launcher.ejectLauncher(),
+                new ParallelAction(
+                stopper.initiate(),
+                intake.start(),
+                loader.start(),
+                trip2),
 
-                trip2,
-//                intake.stopActiveIntake(),
-                loader.stopSingleBallLoader(),
-                launcher.startLauncher(launcherPower+0.035),
                 new ParallelAction(
                         goToGoal3,
-                        new SequentialAction(
-                                new SleepAction(0.3),
-                                intake.stopActiveIntake()
-                        )),
-                loader.startSingleBallLoader(),
-                new SleepAction(sleepTime+0.25),
-                loader.stopSingleBallLoader(),
-                launcher.stopLauncher()
+                        loader.stop(),
+                        stopper.open(),
+                        intake.stop()),
+
+                lifter.lift(),
+                new SleepAction(0.3),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(0.2),
+                loader.stop(),
+                lifter.lift(),
+                new SleepAction(0.3),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(0.2),
+                loader.stop(),
+                lifter.lift(),
+                new SleepAction(0.3),
+                lifter.reset()
         );
 
         Action threeBall4 = new SequentialAction(
-                intake.startActiveIntake(),
-                launcher.ejectLauncher(),
+                new ParallelAction(
+                        stopper.initiate(),
+                        intake.start(),
+                        loader.start(),
+                        trip3),
 
-                trip3,
-//                intake.stopActiveIntake(),
-                loader.stopSingleBallLoader(),
-                launcher.startLauncher(launcherPower),
                 new ParallelAction(
                         goToGoal4,
-                        new SequentialAction(
-                                new SleepAction(0.3),
-                                intake.stopActiveIntake()
-                        )),
-                loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
-                loader.stopSingleBallLoader(),
-                launcher.stopLauncher()
+                        loader.stop(),
+                        stopper.open(),
+                        intake.stop()),
+
+                lifter.lift(),
+                new SleepAction(0.3),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(0.2),
+                loader.stop(),
+                lifter.lift(),
+                new SleepAction(0.3),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(0.2),
+                loader.stop(),
+                lifter.lift(),
+                new SleepAction(0.3),
+                lifter.reset(),
+                stopper.initiate()
         );
-
-
-
         Action fullAction = new SequentialAction(
                 threeBall1,
                 threeBall2,
@@ -173,7 +221,7 @@ public class CLOSEBLUE_12 extends LinearOpMode {
 
         waitForStart();
 
-        Actions.runBlocking(fullAction);
+        Actions.runBlocking(new ParallelAction(launcher.revLauncher(launcherPower), fullAction));
 
     }
 }
