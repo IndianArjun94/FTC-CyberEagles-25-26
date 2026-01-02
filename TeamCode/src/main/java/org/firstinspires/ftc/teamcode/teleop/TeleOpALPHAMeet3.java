@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -23,39 +22,29 @@ public class TeleOpALPHAMeet3 extends OpMode {
     private static double leftBackPower;
     private static double rightFrontPower;
     private static double rightBackPower;
-    private static boolean isLifterUp;
-    private static final double OPEN_POSITION = 0.6;    //right
-    private static final double CLOSED_POSITION = 1.0;    //forward
-    private static final double UP_POSITION = 0.27;    //up
-    private static final double DOWN_POSITION = 0.55;   //down
+
     private static final double SPEED_CAP = 0.8f;
-    private static final double LAUNCHER_MIN = 0.5f;
-    private static double SHOOTING_WHEEL_MULTIPLIER = 0.18f;
-    private static double launcherPowerBoost = 0.0;
+
     private static boolean intakeActive = false;
-    //    private static CRServo frontLeftLoad;
-//    private static CRServo backLeftLoad;
-//    private static CRServo frontRightLoad;
-//    private static CRServo backRightLoad;
+
     private static DcMotor intake;
-    private static double lastLeftBumperPress = System.currentTimeMillis();
-    private static long previousRightBumperPress;
-    private static long previousAPress;
-    private static long previousYPress;
+
+    private static double lastLeftBumperPress;
+    private static long prevFullLaunchButtonPress;
+    private static long prev1BallLaunchButtonPress;
+    private static long prev2BallLaunchButtonPress;
     private static boolean launching = false;
-    private static long launcherSequenceStartTime;
-    private static boolean launcherSequenceLaunched = false;
-    private static long intakeStopTime;
+
     private static PIDFlyWheelTeleOp flyWheel;
     private static LifterTeleOp lifter;
     private static StopperTeleOp stopper;
     private static TripleBallQuadLoaderTeleOp loader;
-    private static long stopperOpenedTime;
+
     private static long previousLaunchingStageTime;
     private static int launchingStage = 1;
-    private static boolean shootTwice;
+
     private static boolean shootOnce;
-    private static int launchingStageCap;
+    private static boolean shootTwice;
 
     @Override
     public void init() {
@@ -161,109 +150,67 @@ public class TeleOpALPHAMeet3 extends OpMode {
         }
 
 //        Loading + Launching Sequence
-        if (gamepad2.right_bumper && System.currentTimeMillis() - previousRightBumperPress > 250) {
-            if (!launching) {
+        if (!launching) {
+            if (gamepad2.right_bumper && System.currentTimeMillis() - prevFullLaunchButtonPress > 250) {
+                launching = true;
+
                 shootOnce = false;
                 shootTwice = false;
-                launching = true;
-                launchingStageCap = 11;
-            }
-        } else if (gamepad2.yWasPressed() && System.currentTimeMillis() - previousYPress > 250) {
-                if (!launching) {
-                    launching = true;
-                    shootTwice = true;
-                    shootOnce = false;
-                    launchingStageCap = 9;
-                }
 
-            } else if (gamepad2.aWasPressed() && System.currentTimeMillis() - previousAPress > 250) {
-                if (!launching) {
-                    launching = true;
-                    shootOnce = true;
-                    shootTwice = false;
-                    launchingStageCap = 5;
-                }
+                prevFullLaunchButtonPress = System.currentTimeMillis();
+            } else if (gamepad2.yWasPressed() && System.currentTimeMillis() - prev2BallLaunchButtonPress > 250) {
+                launching = true;
+
+                shootTwice = true;
+                shootOnce = false;
+
+                prev2BallLaunchButtonPress = System.currentTimeMillis();
+            } else if (gamepad2.aWasPressed() && System.currentTimeMillis() - prev1BallLaunchButtonPress > 250) {
+                launching = true;
+
+                shootOnce = true;
+                shootTwice = false;
+
+                prev1BallLaunchButtonPress = System.currentTimeMillis();
             } else {
                 launching = false;
             }
-            if (!shootTwice && !shootOnce) previousRightBumperPress = System.currentTimeMillis();
-            if (shootTwice) previousYPress = System.currentTimeMillis();
-            if (shootOnce) previousAPress = System.currentTimeMillis();
+        }
 
-                if (launchingStageCap == 5 && launching) {
-                    if (launchingStage == 1) {
-                        stopper.open();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if (launchingStage == 2 && System.currentTimeMillis() - previousLaunchingStageTime >= 200) {
-                        lifter.lift();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if (launchingStage == 3 && System.currentTimeMillis() - previousLaunchingStageTime >= 500) {
-                        lifter.reset();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if (launchingStage == 4 && System.currentTimeMillis() - previousLaunchingStageTime >= 200) {
-                        loader.start();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if (launchingStage == 5 && System.currentTimeMillis() - previousLaunchingStageTime >= 1000) {
-                        loader.stop();
-                        stopper.close();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    }
-                } else if (launchingStageCap == 9 && launching) {
-                    if (launchingStage == 1) {
-                        stopper.open();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if ((launchingStage == 2 || launchingStage == 6) && System.currentTimeMillis() - previousLaunchingStageTime >= 200) {
-                        lifter.lift();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if ((launchingStage == 3 || launchingStage == 7) && System.currentTimeMillis() - previousLaunchingStageTime >= 500) {
-                        lifter.reset();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if ((launchingStage == 4 || launchingStage == 8) && System.currentTimeMillis() - previousLaunchingStageTime >= 200) {
-                        loader.start();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if ((launchingStage == 5 || launchingStage == 9) && System.currentTimeMillis() - previousLaunchingStageTime >= 1000) {
-                        loader.stop();
-                        stopper.close();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    }
-                }
-                else if (launchingStageCap == 11 && launching)
-                    if (launchingStage == 1) {
-                        stopper.open();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if ((launchingStage == 2 || launchingStage == 6 || launchingStage == 10) && System.currentTimeMillis() - previousLaunchingStageTime >= 200) {
-                        lifter.lift();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if ((launchingStage == 3 || launchingStage == 7 || launchingStage == 11) && System.currentTimeMillis() - previousLaunchingStageTime >= 500) {
-                        lifter.reset();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if ((launchingStage == 4 || launchingStage == 8) && System.currentTimeMillis() - previousLaunchingStageTime >= 200) {
-                        loader.start();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    } else if ((launchingStage == 5 || launchingStage == 9) && System.currentTimeMillis() - previousLaunchingStageTime >= 1000) {
-                        loader.stop();
-                        stopper.close();
-                        previousLaunchingStageTime = System.currentTimeMillis();
-                        launchingStage++;
-                    }
-                else {
+        if (launching) {
+            if (launchingStage == 1) {
+                stopper.open();
+                previousLaunchingStageTime = System.currentTimeMillis();
+                launchingStage++;
+            } else if ((launchingStage == 2 || launchingStage == 6 || launchingStage == 10) && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
+                lifter.lift();
+                previousLaunchingStageTime = System.currentTimeMillis();
+                launchingStage++;
+            } else if ((launchingStage == 3 || launchingStage == 7 || launchingStage == 11) && System.currentTimeMillis()-previousLaunchingStageTime >= 500) {
+                lifter.reset();
+                previousLaunchingStageTime = System.currentTimeMillis();
+                launchingStage++;
+                if ((launchingStage == 3 && shootOnce) || (launchingStage == 7 && shootTwice)) {
+                    stopper.close();
                     launching = false;
                     launchingStage = 1;
                 }
+            } else if ((launchingStage == 4 || launchingStage == 8) && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
+                loader.start();
+                previousLaunchingStageTime = System.currentTimeMillis();
+                launchingStage++;
+            } else if ((launchingStage == 5 || launchingStage == 9) && System.currentTimeMillis()-previousLaunchingStageTime >= 1000) {
+                loader.stop();
+                previousLaunchingStageTime = System.currentTimeMillis();
+                launchingStage++;
+            } else if (launchingStage == 12 && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
+                stopper.close();
+                launching = false;
+                launchingStage = 1;
+            }
+        } else {
+            stopper.close();
+        }
 
 //        Camera Apriltag Detection
 //        ObeliskPattern obeliskPattern = AprilTagModule.instance.getObeliskPattern();
@@ -281,9 +228,9 @@ public class TeleOpALPHAMeet3 extends OpMode {
 //        }
 
 //        Update Drivetrain Power
-                updateDrivetrainPower();
-                flyWheel.run();
-                telemetry.update();
+        updateDrivetrainPower();
+        flyWheel.run();
+        telemetry.update();
 
-            }
+    }
 }

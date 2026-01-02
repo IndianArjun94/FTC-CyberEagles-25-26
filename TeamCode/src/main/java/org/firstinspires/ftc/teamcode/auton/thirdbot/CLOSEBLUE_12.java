@@ -207,7 +207,7 @@ public class CLOSEBLUE_12 extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(
-                new ParallelAction(launcher.revLauncher(175), fullAction)
+                new ParallelAction(launcher.revLauncher(170), fullAction)
         );
 
     }
