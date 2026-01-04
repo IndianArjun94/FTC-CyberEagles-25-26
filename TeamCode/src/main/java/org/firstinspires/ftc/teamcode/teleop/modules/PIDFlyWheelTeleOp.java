@@ -29,6 +29,9 @@ public class PIDFlyWheelTeleOp {
         this.launcherMotor = hardwareMap.get(DcMotorEx.class, "launcher");
         this.telemetry = telemetry;
     }
+    public void adjustRPM(int rpm) {
+        targetRPM = rpm;
+    }
 
     public void run() {
         double time = System.nanoTime() / 1_000_000d; // millis
@@ -50,6 +53,7 @@ public class PIDFlyWheelTeleOp {
         telemetry.addData("D: ", derivative * D);
         telemetry.addData("dt: ", time - prevTime);
         telemetry.addData("vel (rpm): ", launcherMotor.getVelocity() * 60 / TICKS_PER_REVOLUTION);
+        telemetry.addData("real vel (rpm): ", launcherMotor.getVelocity() * 60 * (6000/312)/ TICKS_PER_REVOLUTION);
 
 
         telemetry.update();
