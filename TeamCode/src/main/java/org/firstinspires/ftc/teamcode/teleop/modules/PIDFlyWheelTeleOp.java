@@ -6,12 +6,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class PIDFlyWheelTeleOp {
-    public final int TARGET_RPM = 160;
+    public final int TARGET_RPM = 170;
     public int rpmOffset = 0;
     public final int MAX_RPM = 312;
-    public final double TICKS_PER_REVOLUTION = 537.6;
+    public final double TICKS_PER_REVOLUTION = 537.6; // 28?
     public final double MAX_TPS = (MAX_RPM * TICKS_PER_REVOLUTION) / 60;
-    public final double P = 1.06; // TODO: Tune these values
+    public final double P = 0.95; // TODO: Tune these values
     public final double I = 0.006; // TODO: Tune these values
     public final double D = 0.4;
     private DcMotorEx launcherMotor;

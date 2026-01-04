@@ -195,8 +195,9 @@ public class TeleOpALPHAMeet3 extends OpMode {
                 previousLaunchingStageTime = System.currentTimeMillis();
 
                 if ((launchingStage == 4 && shootOnce) || (launchingStage == 8 && shootTwice)) {
-                    if (System.currentTimeMillis() - previousLaunchingStageTime > 2500) {
+                    if (System.currentTimeMillis() - previousLaunchingStageTime >= 2500) {
                         stopper.close();
+                        loader.stop();
                         launching = false;
                         launchingStage = 1;
                     }
@@ -215,6 +216,18 @@ public class TeleOpALPHAMeet3 extends OpMode {
             }
         } else {
             stopper.close();
+        }
+
+//        Launching Power Adjustment (Manual Offsetting)
+
+        if (gamepad2.dpadDownWasPressed()) {
+            flyWheel.increaseRPM();
+        }
+        else if (gamepad2.dpadUpWasPressed()) {
+            flyWheel.decreaseRPM();
+        }
+        else if (gamepad2.dpadLeftWasPressed() || gamepad2.dpadRightWasPressed()) {
+            flyWheel.resetRPM();
         }
 
 //        Camera Apriltag Detection
