@@ -43,8 +43,9 @@ public class TeleOpALPHAMeet3 extends OpMode {
     private static long previousLaunchingStageTime;
     private static int launchingStage = 1;
 
-    private static boolean shootOnce;
-    private static boolean shootTwice;
+    private static boolean shootOnce = false;
+    private static boolean shootTwice = false;
+    private static int targetRPM = 180;
 
     @Override
     public void init() {
@@ -149,31 +150,41 @@ public class TeleOpALPHAMeet3 extends OpMode {
             intake.setPower(0);
         }
 
+        //Power control for launching/loading
+
+        if (gamepad2.dpadDownWasPressed()) {
+            targetRPM -= 5;
+        }
+        else if (gamepad2.dpadUpWasPressed()) {
+            targetRPM += 5;
+        }
+        else if (gamepad2.dpadLeftWasPressed() || gamepad2.dpadRightWasPressed()) {
+            targetRPM = 180;
+        }
+
 //        Loading + Launching Sequence
         if (!launching) {
             if (gamepad2.right_bumper && System.currentTimeMillis() - prevFullLaunchButtonPress > 250) {
                 launching = true;
-
+                launchingStage = 1;
                 shootOnce = false;
                 shootTwice = false;
 
                 prevFullLaunchButtonPress = System.currentTimeMillis();
             } else if (gamepad2.yWasPressed() && System.currentTimeMillis() - prev2BallLaunchButtonPress > 250) {
                 launching = true;
-
+                launchingStage = 1;
                 shootTwice = true;
                 shootOnce = false;
 
                 prev2BallLaunchButtonPress = System.currentTimeMillis();
             } else if (gamepad2.aWasPressed() && System.currentTimeMillis() - prev1BallLaunchButtonPress > 250) {
                 launching = true;
-
+                launchingStage = 1;
                 shootOnce = true;
                 shootTwice = false;
 
                 prev1BallLaunchButtonPress = System.currentTimeMillis();
-            } else {
-                launching = false;
             }
         }
 
@@ -190,14 +201,19 @@ public class TeleOpALPHAMeet3 extends OpMode {
                 lifter.reset();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-                if ((launchingStage == 3 && shootOnce) || (launchingStage == 7 && shootTwice)) {
-                    stopper.close();
-                    launching = false;
-                    launchingStage = 1;
-                }
             } else if ((launchingStage == 4 || launchingStage == 8) && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
                 loader.start();
                 previousLaunchingStageTime = System.currentTimeMillis();
+
+                if ((launchingStage == 4 && shootOnce) || (launchingStage == 8 && shootTwice) && System.currentTimeMillis()-previousLaunchingStageTime >= 500) {
+                    stopper.close();
+                    launching = false;
+                    launchingStage = 1;
+                    shootTwice = false;
+                    shootOnce = false;
+                    return;
+                }
+
                 launchingStage++;
             } else if ((launchingStage == 5 || launchingStage == 9) && System.currentTimeMillis()-previousLaunchingStageTime >= 1000) {
                 loader.stop();
@@ -229,6 +245,7 @@ public class TeleOpALPHAMeet3 extends OpMode {
 
 //        Update Drivetrain Power
         updateDrivetrainPower();
+        flyWheel.adjustRPM(targetRPM);
         flyWheel.run();
         telemetry.update();
 
