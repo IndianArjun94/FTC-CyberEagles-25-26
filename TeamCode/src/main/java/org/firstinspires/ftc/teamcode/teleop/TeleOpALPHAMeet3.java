@@ -56,6 +56,7 @@ public class TeleOpALPHAMeet3 extends OpMode {
 
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         lifter = new LifterTeleOp(hardwareMap, telemetry);
         flyWheel = new PIDFlyWheelTeleOp(hardwareMap, telemetry);
@@ -112,7 +113,7 @@ public class TeleOpALPHAMeet3 extends OpMode {
         }
 
         if (intakeActive && !launching) {
-            intake.setPower(0.9);
+            intake.setPower(1);
             loader.start();
         } else if (!launching) {
             intake.setPower(0);
@@ -122,7 +123,7 @@ public class TeleOpALPHAMeet3 extends OpMode {
         }
 
 //        Loading + Launching Sequence
-        if (!launching) {
+        if (!launching && !intakeActive) {
             if (gamepad2.right_bumper && System.currentTimeMillis() - prevFullLaunchButtonPress > 250) {
                 launching = true;
 
@@ -160,16 +161,9 @@ public class TeleOpALPHAMeet3 extends OpMode {
                 launchingStage++;
             } else if ((launchingStage == 3 || launchingStage == 7 || launchingStage == 11) && System.currentTimeMillis() - previousLaunchingStageTime >= 500) {
                 lifter.reset();
-                if (launchingStage == 7 && !shootTwice) {
-                    flyWheel.increaseRPM();
-                    flyWheel.increaseRPM();
-                } else if (launchingStage == 11) {
-                    flyWheel.decreaseRPM();
-                    flyWheel.decreaseRPM();
-                }
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if ((launchingStage == 4 || launchingStage == 8) && System.currentTimeMillis() - previousLaunchingStageTime >= 200) {
+            } else if ((launchingStage == 4 || launchingStage == 8) && System.currentTimeMillis() - previousLaunchingStageTime >= 350) {
                 if (!loader.loaderActive) {
                     previousLaunchingStageTime = System.currentTimeMillis();
                 }

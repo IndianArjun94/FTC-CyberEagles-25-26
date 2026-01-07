@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loading.Lifter;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.Lifter;
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loading.TripleBallQuadLoader;
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.PIDFlyWheel;
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.Stopper;

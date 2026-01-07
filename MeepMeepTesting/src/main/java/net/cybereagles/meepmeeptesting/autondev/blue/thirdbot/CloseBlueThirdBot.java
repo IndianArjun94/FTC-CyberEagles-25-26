@@ -31,11 +31,20 @@ public class CloseBlueThirdBot {
                     .setDimensions(18, 18)
                     .build();
 
-            Pose2d goalPos = new Pose2d(-22.5, -14, deg(235));
-            Vector2d goalVector = new Vector2d(-22.5, -14);
-            Pose2d trip1pos = new Pose2d(-11.5, -45, deg(270));
-            Pose2d trip2pos = new Pose2d(11.5, -45, deg(270));
-            Pose2d trip3pos = new Pose2d(34.5, -45, deg(270));
+        Pose2d goalPos = new Pose2d(-23.5, -17, deg(227));
+        Vector2d goalVector = new Vector2d(-23.5, -17);
+
+        Pose2d secondBallsHalfwayPos = new Pose2d(-11.5, -20, deg(270));
+        Pose2d secondBallsPos = new Pose2d(-11.5, -45, deg(270));
+        Vector2d secondBallsVector = new Vector2d(-11.5, -45);
+
+        Pose2d thirdBallsHalfwayPos = new Pose2d(11.5, -24, deg(270));
+        Pose2d thirdBallsPos = new Pose2d(11.5, -45, deg(270));
+        Vector2d thirdBallsVector = new Vector2d(11.5, -45);
+
+        Pose2d fourthBallsHalfwayPos = new Pose2d(35.5, -28, deg(270));
+        Pose2d fourthBallsPos = new Pose2d(35.5, -45, deg(270));
+        Vector2d fourthBallsVector = new Vector2d(35.5, -45);
 
             MinVelConstraint slowVelConstraint = new MinVelConstraint(Arrays.asList(
                     new TranslationalVelConstraint(18), // 15 in. per sec cap
@@ -43,36 +52,42 @@ public class CloseBlueThirdBot {
                     )));
 
         Action goToGoal1 = drive.getDrive().actionBuilder(startingPos)
-                .strafeTo(
-                        goalVector)
+                .setTangent(deg(45))
+                .strafeToLinearHeading(goalVector, deg(227))
                 .build();
 
-        Action trip1 = drive.getDrive().actionBuilder(goalPos)
+        Action goToSecondBalls = drive.getDrive().actionBuilder(goalPos)
+                .setTangent(deg(310))
+                .splineToSplineHeading(secondBallsHalfwayPos, deg(270), slowVelConstraint)
+                // Finish the rest of the distance at that fixed heading
+                .splineToConstantHeading(secondBallsVector, deg(270), slowVelConstraint)
+                .build();
+
+        Action goToGoal2 = drive.getDrive().actionBuilder(secondBallsPos)
+                .setTangent(deg(90))
+                .splineToLinearHeading(goalPos, deg(120))
+                .build();
+
+        Action goToThirdBalls = drive.getDrive().actionBuilder(goalPos)
                 .setTangent(deg(0))
-                .splineToLinearHeading(trip1pos, deg(270), slowVelConstraint)
+                .splineToSplineHeading(thirdBallsHalfwayPos, deg(270))
+                // Finish the rest of the distance at that fixed heading
+                .splineToConstantHeading(thirdBallsVector, deg(270), slowVelConstraint)
                 .build();
 
-        Action goToGoal2 = drive.getDrive().actionBuilder(trip1pos)
+        Action goToGoal3 = drive.getDrive().actionBuilder(thirdBallsPos)
                 .setTangent(deg(90))
                 .splineToLinearHeading(goalPos, deg(180))
                 .build();
 
-        Action trip2 = drive.getDrive().actionBuilder(goalPos)
+        Action goToFourthBalls = drive.getDrive().actionBuilder(goalPos)
                 .setTangent(deg(0))
-                .splineToLinearHeading(trip2pos, deg(270), slowVelConstraint)
+                .splineToSplineHeading(fourthBallsHalfwayPos, deg(270))
+                // Finish the rest of the distance at that fixed heading
+                .splineToConstantHeading(fourthBallsVector, deg(270), slowVelConstraint)
                 .build();
 
-        Action goToGoal3 = drive.getDrive().actionBuilder(trip2pos)
-                .setTangent(deg(90))
-                .splineToLinearHeading(goalPos, deg(180))
-                .build();
-
-        Action trip3 = drive.getDrive().actionBuilder(goalPos)
-                .setTangent(deg(0))
-                .splineToLinearHeading(trip3pos, deg(270), slowVelConstraint)
-                .build();
-
-        Action goToGoal4 = drive.getDrive().actionBuilder(trip3pos)
+        Action goToGoal4 = drive.getDrive().actionBuilder(fourthBallsPos)
                 .setTangent(deg(90))
                 .splineToLinearHeading(goalPos, deg(180))
                 .build();
@@ -80,38 +95,40 @@ public class CloseBlueThirdBot {
         Action threeBall1 = new SequentialAction(
                 new ParallelAction(
                         goToGoal1,
-                new SleepAction(3)
-        ));
+                    new SleepAction(3)
+                )
+        );
 
         Action threeBall2 = new SequentialAction(
                 new ParallelAction(
-                        trip1),
+                        goToSecondBalls),
 
                 new ParallelAction(
                         goToGoal2,
 
                 new SleepAction(3)
-        ));
+                )
+        );
 
         Action threeBall3 = new SequentialAction(
                 new ParallelAction(
-                        trip2),
+                        goToThirdBalls),
 
                 new ParallelAction(
                         goToGoal3,
 
                 new SleepAction(3)
-        ));
+                )
+        );
 
         Action threeBall4 = new SequentialAction(
                 new ParallelAction(
-                        trip3),
+                        goToFourthBalls),
 
                 new ParallelAction(
-                        goToGoal4,
-
-                new SleepAction(3)
-        ));
+                        goToGoal4
+                )
+        );
 
 
             Action fullAction = new SequentialAction(

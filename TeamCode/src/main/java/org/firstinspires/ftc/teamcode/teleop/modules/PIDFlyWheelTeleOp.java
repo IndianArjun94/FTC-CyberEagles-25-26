@@ -11,7 +11,7 @@ public class PIDFlyWheelTeleOp {
     public final int MAX_RPM = 312;
     public final double TICKS_PER_REVOLUTION = 537.6;
     public final double MAX_TPS = (MAX_RPM * TICKS_PER_REVOLUTION) / 60;
-    public final double P = 0.95; // TODO: Tune these values
+    public final double P = 1.06; // TODO: Tune these values
     public final double I = 0.006; // TODO: Tune these values
     public final double D = 0.4;
     private DcMotorEx launcherMotor;

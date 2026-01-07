@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.auton.thirdbot;
 
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -11,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.intake.Intake;
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.PIDFlyWheel;
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.Stopper;
-import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loading.Lifter;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.Lifter;
 import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loading.TripleBallQuadLoader;
 
 @Autonomous(name = "Robot Test")
