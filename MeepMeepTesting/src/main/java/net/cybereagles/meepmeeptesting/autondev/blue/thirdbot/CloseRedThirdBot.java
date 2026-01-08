@@ -12,8 +12,6 @@ import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
-import com.noahbres.meepmeep.core.colorscheme.ColorScheme;
-import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
@@ -25,54 +23,73 @@ public class CloseRedThirdBot {
 
         Pose2d startingPos = new Pose2d(-52.5, 46.5, deg(125));
 
-        RoadRunnerBotEntity drive = new DefaultBotBuilder(sim)
+            RoadRunnerBotEntity drive = new DefaultBotBuilder(sim)
 
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
-                .setDimensions(18, 18)
-                .build();
+                    .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                    .setDimensions(18, 18)
+                    .build();
 
-        Pose2d goalPos = new Pose2d(-22.5, 14, deg(125));
-        Vector2d goalVector = new Vector2d(-22.5, 14);
-        Pose2d trip1pos = new Pose2d(-11.5, 45, deg(90));
-        Pose2d trip2pos = new Pose2d(11.5, 45, deg(90));
-        Pose2d trip3pos = new Pose2d(34.5, 45, deg(90));
+        Pose2d goalPos = new Pose2d(-23.5, 17, deg(133));
+        Vector2d goalVector = new Vector2d(-23.5, 17);
 
-        MinVelConstraint slowVelConstraint = new MinVelConstraint(Arrays.asList(
-                new TranslationalVelConstraint(18), // 15 in. per sec cap
-                new AngularVelConstraint(deg(220) // 180 deg per sec cap
-                )));
+        Pose2d secondBallsHalfwayPos = new Pose2d(-11.5, 20, deg(90));
+        Pose2d secondBallsPos = new Pose2d(-11.5, 45, deg(90));
+        Vector2d secondBallsVector = new Vector2d(-11.5, 45);
+
+        Pose2d thirdBallsHalfwayPos = new Pose2d(11.5, 24, deg(90));
+        Pose2d thirdBallsPos = new Pose2d(11.5, 45, deg(90));
+        Vector2d thirdBallsVector = new Vector2d(11.5, 45);
+
+        Pose2d fourthBallsHalfwayPos = new Pose2d(35.5, 28, deg(90));
+        Pose2d fourthBallsPos = new Pose2d(35.5, 45, deg(90));
+        Vector2d fourthBallsVector = new Vector2d(35.5, 45);
+
+            MinVelConstraint slowVelConstraint = new MinVelConstraint(Arrays.asList(
+                    new TranslationalVelConstraint(18), // 15 in. per sec cap
+                    new AngularVelConstraint(deg(220) // 180 deg per sec cap
+                    )));
 
         Action goToGoal1 = drive.getDrive().actionBuilder(startingPos)
-                .strafeTo(
-                        goalVector)
+                .setTangent(deg(315))
+                .strafeToLinearHeading(goalVector, deg(133))
                 .build();
 
-        Action trip1 = drive.getDrive().actionBuilder(goalPos)
+//        Action goToGoal1 = drive.actionBuilder(startingPos)
+//                .lineToX(-15)
+//                .build();
+
+        Action goToSecondBalls = drive.getDrive().actionBuilder(goalPos)
+                .setTangent(deg(50))
+                .splineToSplineHeading(secondBallsHalfwayPos, deg(90), slowVelConstraint)
+                // Finish the rest of the distance at that fixed heading
+                .splineToConstantHeading(secondBallsVector, deg(90), slowVelConstraint)
+                .build();
+
+        Action goToGoal2 = drive.getDrive().actionBuilder(secondBallsPos)
+                .setTangent(deg(270))
+                .splineToLinearHeading(goalPos, deg(240))
+                .build();
+
+        Action goToThirdBalls = drive.getDrive().actionBuilder(goalPos)
                 .setTangent(deg(0))
-                .splineToLinearHeading(trip1pos, deg(90), slowVelConstraint)
+                .splineToSplineHeading(thirdBallsHalfwayPos, deg(90))
+                // Finish the rest of the distance at that fixed heading
+                .splineToConstantHeading(thirdBallsVector, deg(90), slowVelConstraint)
                 .build();
 
-        Action goToGoal2 = drive.getDrive().actionBuilder(trip1pos)
+        Action goToGoal3 = drive.getDrive().actionBuilder(thirdBallsPos)
                 .setTangent(deg(270))
                 .splineToLinearHeading(goalPos, deg(180))
                 .build();
 
-        Action trip2 = drive.getDrive().actionBuilder(goalPos)
+        Action goToFourthBalls = drive.getDrive().actionBuilder(goalPos)
                 .setTangent(deg(0))
-                .splineToLinearHeading(trip2pos, deg(90), slowVelConstraint)
+                .splineToSplineHeading(fourthBallsHalfwayPos, deg(90))
+                // Finish the rest of the distance at that fixed heading
+                .splineToConstantHeading(fourthBallsVector, deg(90), slowVelConstraint)
                 .build();
 
-        Action goToGoal3 = drive.getDrive().actionBuilder(trip2pos)
-                .setTangent(deg(270))
-                .splineToLinearHeading(goalPos, deg(180))
-                .build();
-
-        Action trip3 = drive.getDrive().actionBuilder(goalPos)
-                .setTangent(deg(0))
-                .splineToLinearHeading(trip3pos, deg(90), slowVelConstraint)
-                .build();
-
-        Action goToGoal4 = drive.getDrive().actionBuilder(trip3pos)
+        Action goToGoal4 = drive.getDrive().actionBuilder(fourthBallsPos)
                 .setTangent(deg(270))
                 .splineToLinearHeading(goalPos, deg(180))
                 .build();
@@ -80,54 +97,56 @@ public class CloseRedThirdBot {
         Action threeBall1 = new SequentialAction(
                 new ParallelAction(
                         goToGoal1,
-                        new SleepAction(3)
-                ));
+                    new SleepAction(3)
+                )
+        );
 
         Action threeBall2 = new SequentialAction(
                 new ParallelAction(
-                        trip1),
+                        goToSecondBalls),
 
                 new ParallelAction(
                         goToGoal2,
 
-                        new SleepAction(3)
-                ));
+                new SleepAction(3)
+                )
+        );
 
         Action threeBall3 = new SequentialAction(
                 new ParallelAction(
-                        trip2),
+                        goToThirdBalls),
 
                 new ParallelAction(
                         goToGoal3,
 
-                        new SleepAction(3)
-                ));
+                new SleepAction(3)
+                )
+        );
 
         Action threeBall4 = new SequentialAction(
                 new ParallelAction(
-                        trip3),
+                        goToFourthBalls),
 
                 new ParallelAction(
-                        goToGoal4,
-
-                        new SleepAction(3)
-                ));
-
-
-        Action fullAction = new SequentialAction(
-                threeBall1,
-                threeBall2,
-                threeBall3,
-                threeBall4
+                        goToGoal4
+                )
         );
 
-        // waitForStart();
 
-        drive.runAction(fullAction);
-        sim.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
-                .setDarkMode(true)
-                .setBackgroundAlpha(0.9f)
-                .addEntity(drive)
-                .start();
+            Action fullAction = new SequentialAction(
+                    threeBall1,
+                    threeBall2,
+                    threeBall3,
+                    threeBall4
+            );
+
+            // waitForStart();
+
+            drive.runAction(fullAction);
+            sim.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
+                    .setDarkMode(true)
+                    .setBackgroundAlpha(0.9f)
+                    .addEntity(drive)
+                    .start();
+        }
     }
-}
