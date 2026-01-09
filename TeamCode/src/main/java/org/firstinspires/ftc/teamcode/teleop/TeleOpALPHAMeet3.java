@@ -56,7 +56,6 @@ public class TeleOpALPHAMeet3 extends OpMode {
 
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         lifter = new LifterTeleOp(hardwareMap, telemetry);
         flyWheel = new PIDFlyWheelTeleOp(hardwareMap, telemetry);
