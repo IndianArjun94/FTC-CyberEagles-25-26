@@ -19,7 +19,8 @@ public class MotorEncoderDiagnostic extends OpMode {
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBack");
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBack");
 
-        rightBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
@@ -64,9 +65,14 @@ public class MotorEncoderDiagnostic extends OpMode {
         double diffPosLeftFront = endPosLeftFront-startPosLeftFront;
         double diffPosRightFront = endPosRightFront-startPosRightFront;
 
-        telemetry.addData("Front Left: ", Double.toString(diffPosLeftFront/timeDiff));
-        telemetry.addData("Front Right: ", Double.toString(diffPosRightFront/timeDiff));
-        telemetry.addData("Back Left: ", Double.toString(diffPosLeftBack/timeDiff));
-        telemetry.addData("Back Right: ", Double.toString(diffPosRightBack/timeDiff));
+//        telemetry.addData("Front Left: ", Double.toString(diffPosLeftFront/timeDiff));
+//        telemetry.addData("Front Right: ", Double.toString(diffPosRightFront/timeDiff));
+//        telemetry.addData("Back Left: ", Double.toString(diffPosLeftBack/timeDiff));
+//        telemetry.addData("Back Right: ", Double.toString(diffPosRightBack/timeDiff));
+
+        telemetry.addData("Front Left: ", Double.toString(leftFrontMotor.getCurrentPosition()));
+        telemetry.addData("Front Right: ", Double.toString(rightFrontMotor.getCurrentPosition()));
+        telemetry.addData("Back Left: ", Double.toString(leftBackMotor.getCurrentPosition()));
+        telemetry.addData("Back Right: ", Double.toString(rightBackMotor.getCurrentPosition()));
     }
 }

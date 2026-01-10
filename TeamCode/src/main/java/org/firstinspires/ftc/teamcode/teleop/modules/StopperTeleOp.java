@@ -9,7 +9,7 @@ public class StopperTeleOp{
     private Servo stopperServo;
 
     private final double CLOSED_POSITION = 0.1; // straight up
-    private final double OPEN_POSITION = 0.5; // straight right
+    private final double OPEN_POSITION = 0.4; // straight right
     private Telemetry telemetry;
 
     public StopperTeleOp(HardwareMap hardwareMap, Telemetry telemetry) {

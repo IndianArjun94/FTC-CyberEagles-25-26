@@ -13,7 +13,7 @@ public class Stopper {
     private Servo stopeprServo;
 
     private final double STOPPING_POS = 0.1; // straight up
-    private final double OPEN_POSITION = 0.5; // straight right
+    private final double OPEN_POSITION = 0.4; // straight right
     private Telemetry telemetry;
 
     public Stopper(HardwareMap hardwareMap, Telemetry telemetry) {

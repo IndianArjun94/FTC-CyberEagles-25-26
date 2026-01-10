@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loading;
+package org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher;
 
 import androidx.annotation.NonNull;
 
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Lifter {
     private Servo lifterServo;
 
-    private final double UP_POSITION = 0.27; // straight up
+    private final double UP_POSITION = 0.23; // straight up
     private final double DOWN_POSITION = 0.55; // straight right
     private Telemetry telemetry;
 

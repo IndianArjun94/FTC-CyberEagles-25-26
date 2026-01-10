@@ -16,164 +16,257 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.intake.Intake;
-import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.launcher.Launcher;
-import org.firstinspires.ftc.teamcode.auton.legacy_autons.legacy_modules.first_second_bot_modules.loader.SingleBallLoader;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.intake.Intake;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.loading.TripleBallQuadLoader;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.PIDFlyWheel;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.Stopper;
+import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.Lifter;
 
 import java.util.Arrays;
 
-@Autonomous(name = "CLOSE BLUE Multiple Balls")
+@Autonomous(name = "CLOSE BLUE :)")
 public class CLOSEBLUE_12 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startingPos = new Pose2d(-52.5,-46.5,deg(235));
+        //Making the modules and startingPos
+        Pose2d startingPos = new Pose2d(-52.5, -46.5, deg(235));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, startingPos);
-        Launcher launcher = new Launcher(hardwareMap);
-        SingleBallLoader loader = new SingleBallLoader(hardwareMap);
-        Intake intake = new Intake(hardwareMap, drive, telemetry);
+        PIDFlyWheel launcher = new PIDFlyWheel(hardwareMap, telemetry);
+        TripleBallQuadLoader loader = new TripleBallQuadLoader(hardwareMap);
+        Intake intake = new Intake(hardwareMap, telemetry);
+        Stopper stopper = new Stopper(hardwareMap, telemetry);
+        Lifter lifter = new Lifter(hardwareMap, telemetry);
 
-        Pose2d goalPos = new Pose2d(-22.5, -14, deg(229));
-        Vector2d goalVector = new Vector2d(-22.5, -14);
-        //Pose2d ball2Pos = new Pose2d(-13, -27.5, deg(270));
-        //Pose2d ball3Pos = new Pose2d(-13, -32, deg(270));
-        Pose2d trip1pos = new Pose2d(-13, -36.5, deg(270));
-//        Pose2d ball5Pos = new Pose2d(11.5, -26.5, deg(270));
-//        Pose2d ball6Pos = new Pose2d(11.5, -31, deg(270));
-        Pose2d trip2pos = new Pose2d(11.5, -35.5, deg(270));
-        Pose2d trip3pos = new Pose2d(11.5, -35.5, deg(270));
+        Pose2d goalPos = new Pose2d(-23.5, -17, deg(227));
+        Vector2d goalVector = new Vector2d(-23.5, -17);
 
-        final float launcherPower = 0.66f;
-        final float sleepTime = 0.75f;
+        Pose2d secondBallsHalfwayPos = new Pose2d(-11.5, -20, deg(270));
+        Pose2d secondBallsPos = new Pose2d(-11.5, -45, deg(270));
+        Vector2d secondBallsVector = new Vector2d(-11.5, -45);
+
+        Pose2d thirdBallsHalfwayPos = new Pose2d(11.5, -24, deg(270));
+        Pose2d thirdBallsPos = new Pose2d(11.5, -45, deg(270));
+        Vector2d thirdBallsVector = new Vector2d(11.5, -45);
+
+        Pose2d fourthBallsHalfwayPos = new Pose2d(35.5, -28, deg(270));
+        Pose2d fourthBallsPos = new Pose2d(35.5, -45, deg(270));
+        Vector2d fourthBallsVector = new Vector2d(35.5, -45);
 
         MinVelConstraint slowVelConstraint = new MinVelConstraint(Arrays.asList(
-                new TranslationalVelConstraint(18), // 15 in. per sec cap
-                new AngularVelConstraint(deg(180) // 180 deg per sec cap
+                new TranslationalVelConstraint(10), // 15 in. per sec cap
+                new AngularVelConstraint(deg(220) // 180 deg per sec cap
                 )));
 
-        MinVelConstraint fastVelConstraint = new MinVelConstraint(Arrays.asList(
-                new TranslationalVelConstraint(25), // 15 in. per sec cap
-                new AngularVelConstraint(deg(180) // 180 deg per sec cap
+        MinVelConstraint mediumVelConstraint = new MinVelConstraint(Arrays.asList(
+                new TranslationalVelConstraint(22), // 15 in. per sec cap
+                new AngularVelConstraint(deg(220) // 180 deg per sec cap
                 )));
-
 
         Action goToGoal1 = drive.actionBuilder(startingPos)
-                .setTangent(deg(55))
-                .splineToConstantHeading(
-                        goalVector, deg(55))
+                .setTangent(deg(45))
+                .strafeToLinearHeading(goalVector, deg(227))
                 .build();
 
-        Action trip1 = drive.actionBuilder(goalPos)
-                .setTangent(deg(0))
-                .splineToLinearHeading(trip1pos, deg(270), slowVelConstraint)
+//        Action goToGoal1 = drive.actionBuilder(startingPos)
+//                .lineToX(-15)
+//                .build();
+
+        Action goToSecondBalls = drive.actionBuilder(goalPos)
+                .setTangent(deg(310))
+                .splineToSplineHeading(secondBallsHalfwayPos, deg(270), slowVelConstraint)
+                // Finish the rest of the distance at that fixed heading
+                .splineToConstantHeading(secondBallsVector, deg(270), slowVelConstraint)
                 .build();
 
-        Action goToGoal2 = drive.actionBuilder(trip1pos)
+        Action goToGoal2 = drive.actionBuilder(secondBallsPos)
                 .setTangent(deg(90))
-                .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
+                .splineToLinearHeading(goalPos, deg(120))
                 .build();
 
-        Action trip2 = drive.actionBuilder(goalPos)
+        Action goToThirdBalls = drive.actionBuilder(goalPos)
                 .setTangent(deg(0))
-                .splineToLinearHeading(trip2pos, deg(270), slowVelConstraint)
+                .splineToSplineHeading(thirdBallsHalfwayPos, deg(270))
+                // Finish the rest of the distance at that fixed heading
+                .splineToConstantHeading(thirdBallsVector, deg(270), slowVelConstraint)
                 .build();
 
-        Action goToGoal3 = drive.actionBuilder(trip2pos)
+        Action goToGoal3 = drive.actionBuilder(thirdBallsPos)
                 .setTangent(deg(90))
-                .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
+                .splineToLinearHeading(goalPos, deg(180))
                 .build();
 
-        Action trip3 = drive.actionBuilder(goalPos)
+        Action goToFourthBalls = drive.actionBuilder(goalPos)
                 .setTangent(deg(0))
-                .splineToLinearHeading(trip3pos, deg(270), slowVelConstraint)
+                .splineToSplineHeading(fourthBallsHalfwayPos, deg(270))
+                // Finish the rest of the distance at that fixed heading
+                .splineToConstantHeading(fourthBallsVector, deg(270), slowVelConstraint)
                 .build();
 
-        Action goToGoal4 = drive.actionBuilder(trip3pos)
+        Action goToGoal4 = drive.actionBuilder(fourthBallsPos)
                 .setTangent(deg(90))
-                .splineToLinearHeading(goalPos, deg(180), fastVelConstraint)
+                .splineToLinearHeading(goalPos, deg(180))
                 .build();
 
-        Action threeBall1 = new SequentialAction(
-                launcher.startLauncher(launcherPower-0.05),
-                goToGoal1,
-                loader.startSingleBallLoader(),
-                new SleepAction(sleepTime+0.5),
-                loader.stopSingleBallLoader(),
-                launcher.stopLauncher()
+        //actions with shooting+moving
+
+        Action scoreFirstBalls = new SequentialAction(
+                new ParallelAction(
+                    goToGoal1,
+                    stopper.open()
+                ),
+
+                new SleepAction(2),
+
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(), // lower
+                loader.start(), // load ball
+                new SleepAction(1),
+                loader.stop(),
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(1),
+                loader.stop(),
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(),
+                stopper.initiate()
         );
 
-        Action threeBall2 = new SequentialAction(
-                intake.startActiveIntake(),
-                launcher.ejectLauncher(),
-                trip1,
-//                intake.stopActiveIntake(),
-                loader.stopSingleBallLoader(),
-                launcher.startLauncher(launcherPower+0.035),
+        Action getSecondBalls = new SequentialAction(
+                new ParallelAction(
+                    intake.start(),
+                    loader.start(),
+                    goToSecondBalls
+                ),
+
+                intake.stop()
+        );
+
+        Action scoreSecondBall = new SequentialAction(
                 new ParallelAction(
                         goToGoal2,
                         new SequentialAction(
-                                new SleepAction(0.3),
-                                intake.stopActiveIntake()
-                        )),
-                loader.startSingleBallLoader(),
-                new SleepAction(sleepTime+0.25),
-                loader.stopSingleBallLoader(),
-                launcher.stopLauncher()
+                                new SleepAction(1),
+                                loader.stop(),
+                                stopper.open()
+                        )
+                ),
+
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(), // lower
+                loader.start(), // load ball
+                new SleepAction(1),
+                loader.stop(),
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(1),
+                loader.stop(),
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(),
+                stopper.initiate()
         );
 
-        Action threeBall3 = new SequentialAction(
-                intake.startActiveIntake(),
-                launcher.ejectLauncher(),
+        Action getThirdBalls = new SequentialAction(
+                new ParallelAction(
+                        intake.start(),
+                        loader.start(),
+                        goToThirdBalls
+                ),
 
-                trip2,
-//                intake.stopActiveIntake(),
-                loader.stopSingleBallLoader(),
-                launcher.startLauncher(launcherPower+0.035),
+                intake.stop()
+        );
+
+        Action scoreThirdBalls = new SequentialAction(
                 new ParallelAction(
                         goToGoal3,
                         new SequentialAction(
-                                new SleepAction(0.3),
-                                intake.stopActiveIntake()
-                        )),
-                loader.startSingleBallLoader(),
-                new SleepAction(sleepTime+0.25),
-                loader.stopSingleBallLoader(),
-                launcher.stopLauncher()
+                                new SleepAction(1),
+                                loader.stop(),
+                                stopper.open()
+                        )
+                ),
+
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(), // lower
+                loader.start(), // load ball
+                new SleepAction(1),
+                loader.stop(),
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(1),
+                loader.stop(),
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(),
+                stopper.initiate()
         );
 
-        Action threeBall4 = new SequentialAction(
-                intake.startActiveIntake(),
-                launcher.ejectLauncher(),
+        Action getFourthBalls = new SequentialAction(
+                new ParallelAction(
+                        intake.start(),
+                        loader.start(),
+                        goToFourthBalls
+                ),
 
-                trip3,
-//                intake.stopActiveIntake(),
-                loader.stopSingleBallLoader(),
-                launcher.startLauncher(launcherPower),
+                intake.stop()
+        );
+
+        Action scoreFourthBalls = new SequentialAction(
                 new ParallelAction(
                         goToGoal4,
                         new SequentialAction(
-                                new SleepAction(0.3),
-                                intake.stopActiveIntake()
-                        )),
-                loader.startSingleBallLoader(),
-                new SleepAction(sleepTime),
-                loader.stopSingleBallLoader(),
-                launcher.stopLauncher()
+                                new SleepAction(1),
+                                loader.stop(),
+                                stopper.open()
+                        )
+                ),
+
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(), // lower
+                loader.start(), // load ball
+                new SleepAction(1),
+                loader.stop(),
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(),
+                loader.start(),
+                new SleepAction(1),
+                loader.stop(),
+                lifter.lift(), // shoot
+                new SleepAction(0.4),
+                lifter.reset(),
+                stopper.initiate()
         );
 
 
-
         Action fullAction = new SequentialAction(
-                threeBall1,
-                threeBall2,
-                threeBall3,
-                threeBall4
+                scoreFirstBalls,
+                getSecondBalls,
+                scoreSecondBall,
+                getThirdBalls,
+                scoreThirdBalls,
+                getFourthBalls,
+                scoreFourthBalls
         );
 
         waitForStart();
 
-        Actions.runBlocking(fullAction);
+        Actions.runBlocking(
+                new ParallelAction(launcher.revLauncher(155), fullAction)
+        );
 
     }
 }
