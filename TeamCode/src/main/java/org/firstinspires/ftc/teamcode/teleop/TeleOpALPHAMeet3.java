@@ -203,8 +203,10 @@ public class TeleOpALPHAMeet3 extends OpMode {
             flyWheel.decreaseRPM();
         } else if (gamepad2.dpadUpWasPressed()) {
             flyWheel.increaseRPM();
-        } else if (gamepad2.dpadLeftWasPressed() || gamepad2.dpadRightWasPressed()) {
+        } else if (gamepad2.dpadLeftWasPressed()) {
             flyWheel.resetRPM();
+        } else if (gamepad2.dpadRightWasPressed()) {
+            flyWheel.rpmOffset = 30;
         }
 
 //        Camera Apriltag Detection
