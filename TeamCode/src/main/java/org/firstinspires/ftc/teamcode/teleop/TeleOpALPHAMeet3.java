@@ -154,15 +154,15 @@ public class TeleOpALPHAMeet3 extends OpMode {
                 stopper.open();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if ((launchingStage == 2 || launchingStage == 6 || launchingStage == 10) && System.currentTimeMillis() - previousLaunchingStageTime >= 200) {
+            } else if ((launchingStage == 2 || launchingStage == 6 || launchingStage == 10) && System.currentTimeMillis() - previousLaunchingStageTime >= 200) { // old 200
                 lifter.lift();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if ((launchingStage == 3 || launchingStage == 7 || launchingStage == 11) && System.currentTimeMillis() - previousLaunchingStageTime >= 500) {
+            } else if ((launchingStage == 3 || launchingStage == 7 || launchingStage == 11) && System.currentTimeMillis() - previousLaunchingStageTime >= 350) { // old 500
                 lifter.reset();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if ((launchingStage == 4 || launchingStage == 8) && System.currentTimeMillis() - previousLaunchingStageTime >= 350) {
+            } else if ((launchingStage == 4 || launchingStage == 8) && System.currentTimeMillis() - previousLaunchingStageTime >= 100) { // old 350
                 if (!loader.loaderActive) {
                     previousLaunchingStageTime = System.currentTimeMillis();
                 }
@@ -173,7 +173,7 @@ public class TeleOpALPHAMeet3 extends OpMode {
                     telemetry.addData("launchingStage: ", Integer.toString(launchingStage));
                     telemetry.addData("time diff:", Long.toString(System.currentTimeMillis() - previousLaunchingStageTime));
                     telemetry.update();
-                    if (System.currentTimeMillis() - previousLaunchingStageTime >= 1500) {
+                    if (System.currentTimeMillis() - previousLaunchingStageTime >= 1000) { // old 1500
                         stopper.close();
                         loader.stop();
                         launching = false;
@@ -183,11 +183,11 @@ public class TeleOpALPHAMeet3 extends OpMode {
                 } else {
                     launchingStage++;
                 }
-            } else if ((launchingStage == 5 || launchingStage == 9) && System.currentTimeMillis() - previousLaunchingStageTime >= 1000) {
+            } else if ((launchingStage == 5 || launchingStage == 9) && System.currentTimeMillis() - previousLaunchingStageTime >= 400) { // old 1000
                 loader.stop();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if (launchingStage == 12 && System.currentTimeMillis() - previousLaunchingStageTime >= 200) {
+            } else if (launchingStage == 12 && System.currentTimeMillis() - previousLaunchingStageTime >= 50) { // old 200
                 stopper.close();
                 launching = false;
                 launchingStage = 1;

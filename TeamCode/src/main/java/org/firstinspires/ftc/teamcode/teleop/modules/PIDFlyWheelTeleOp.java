@@ -10,7 +10,7 @@ public class PIDFlyWheelTeleOp {
     public int rpmOffset = 0;
     public final int MAX_RPM = 312;
     public final double TICKS_PER_REVOLUTION = 537.6; // 28?
-    public final double MAX_TPS = (MAX_RPM * TICKS_PER_REVOLUTION) / 60;
+    public double MAX_TPS = ((TARGET_RPM+rpmOffset)*TICKS_PER_REVOLUTION) / 60;
     public final double P = 0.95; // TODO: Tune these values
     public final double I = 0.006; // TODO: Tune these values
     public final double D = 0.4;
@@ -56,13 +56,16 @@ public class PIDFlyWheelTeleOp {
 
     public void increaseRPM() {
         rpmOffset += 5;
+        MAX_TPS = ((TARGET_RPM+rpmOffset)*TICKS_PER_REVOLUTION) / 60;
     }
 
     public void decreaseRPM() {
         rpmOffset -= 5;
+        MAX_TPS = ((TARGET_RPM+rpmOffset)*TICKS_PER_REVOLUTION) / 60;
     }
 
     public void resetRPM() {
         rpmOffset = 0;
+        MAX_TPS = ((TARGET_RPM+rpmOffset)*TICKS_PER_REVOLUTION) / 60;
     }
 }
