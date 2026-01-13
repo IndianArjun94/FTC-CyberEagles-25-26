@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.teleop.modules.PIDFlyWheelTeleOp;
 import org.firstinspires.ftc.teamcode.teleop.modules.StopperTeleOp;
 import org.firstinspires.ftc.teamcode.teleop.modules.TripleBallQuadLoaderTeleOp;
 
-@TeleOp(name = "TeleOp ALPHA")
+@TeleOp(name = "TeleOp Golden 1/4/2026")
 public class TeleOpALPHAMeet3 extends OpMode {
 
     private static DcMotor leftFrontMotor;
@@ -54,16 +54,6 @@ public class TeleOpALPHAMeet3 extends OpMode {
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBack");
         intake = hardwareMap.get(DcMotor.class, "intake");
 
-//        lifter = hardwareMap.get(Servo.class, "lifter");
-//        frontLeftLoad = hardwareMap.get(CRServo.class, "frontLeftLoad");
-//        backLeftLoad = hardwareMap.get(CRServo.class, "backLeftLoad");
-//        frontRightLoad = hardwareMap.get(CRServo.class, "frontRightLoad");
-//        backRightLoad = hardwareMap.get(CRServo.class, "backRightLoad");
-
-//        launcherMotor = hardwareMap.get(DcMotorEx.class, "launcher");
-//        frontRightLoad.setDirection(DcMotorSimple.Direction.REVERSE);
-//        backRightLoad.setDirection(DcMotorSimple.Direction.REVERSE);
-
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -73,24 +63,6 @@ public class TeleOpALPHAMeet3 extends OpMode {
         loader = new TripleBallQuadLoaderTeleOp(hardwareMap);
 
     }
-
-//    public static void doLiftingSequence() {
-//        lifter.setPosition(UP_POSITION);
-//        isLifterUp = true;
-//        lifter.setPosition(DOWN_POSITION);
-//        isLifterUp = false;
-//        lifterSequenceTime = System.currentTimeMillis();
-//        shotCount += 1;
-//        for (int i = 0;i > 2;i++) {
-//            if (System.currentTimeMillis() - lifterSequenceTime >= 750 || System.currentTimeMillis() - lifterSequenceTimeTwo >= 750)
-//            lifter.setPosition(UP_POSITION);
-//            isLifterUp = true;
-//            lifter.setPosition(DOWN_POSITION);
-//            isLifterUp = false;
-//            shotCount += 1;
-//            lifterSequenceTimeTwo = System.currentTimeMillis();
-//        }
-//    }
 
     //  Update Function that runs after every loop  //
     public static void updateDrivetrainPower() {
@@ -140,7 +112,7 @@ public class TeleOpALPHAMeet3 extends OpMode {
         }
 
         if (intakeActive && !launching) {
-            intake.setPower(0.9);
+            intake.setPower(1);
             loader.start();
         } else if (!launching) {
             intake.setPower(0);
@@ -150,7 +122,7 @@ public class TeleOpALPHAMeet3 extends OpMode {
         }
 
 //        Loading + Launching Sequence
-        if (!launching) {
+        if (!launching && !intakeActive) {
             if (gamepad2.right_bumper && System.currentTimeMillis() - prevFullLaunchButtonPress > 250) {
                 launching = true;
 
@@ -182,20 +154,26 @@ public class TeleOpALPHAMeet3 extends OpMode {
                 stopper.open();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if ((launchingStage == 2 || launchingStage == 6 || launchingStage == 10) && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
+            } else if ((launchingStage == 2 || launchingStage == 6 || launchingStage == 10) && System.currentTimeMillis() - previousLaunchingStageTime >= 200) {
                 lifter.lift();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if ((launchingStage == 3 || launchingStage == 7 || launchingStage == 11) && System.currentTimeMillis()-previousLaunchingStageTime >= 500) {
+            } else if ((launchingStage == 3 || launchingStage == 7 || launchingStage == 11) && System.currentTimeMillis() - previousLaunchingStageTime >= 500) {
                 lifter.reset();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if ((launchingStage == 4 || launchingStage == 8) && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
+            } else if ((launchingStage == 4 || launchingStage == 8) && System.currentTimeMillis() - previousLaunchingStageTime >= 350) {
+                if (!loader.loaderActive) {
+                    previousLaunchingStageTime = System.currentTimeMillis();
+                }
+
                 loader.start();
-                previousLaunchingStageTime = System.currentTimeMillis();
 
                 if ((launchingStage == 4 && shootOnce) || (launchingStage == 8 && shootTwice)) {
-                    if (System.currentTimeMillis() - previousLaunchingStageTime >= 2500) {
+                    telemetry.addData("launchingStage: ", Integer.toString(launchingStage));
+                    telemetry.addData("time diff:", Long.toString(System.currentTimeMillis() - previousLaunchingStageTime));
+                    telemetry.update();
+                    if (System.currentTimeMillis() - previousLaunchingStageTime >= 1500) {
                         stopper.close();
                         loader.stop();
                         launching = false;
@@ -205,11 +183,11 @@ public class TeleOpALPHAMeet3 extends OpMode {
                 } else {
                     launchingStage++;
                 }
-            } else if ((launchingStage == 5 || launchingStage == 9) && System.currentTimeMillis()-previousLaunchingStageTime >= 1000) {
+            } else if ((launchingStage == 5 || launchingStage == 9) && System.currentTimeMillis() - previousLaunchingStageTime >= 1000) {
                 loader.stop();
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
-            } else if (launchingStage == 12 && System.currentTimeMillis()-previousLaunchingStageTime >= 200) {
+            } else if (launchingStage == 12 && System.currentTimeMillis() - previousLaunchingStageTime >= 200) {
                 stopper.close();
                 launching = false;
                 launchingStage = 1;
@@ -218,16 +196,17 @@ public class TeleOpALPHAMeet3 extends OpMode {
             stopper.close();
         }
 
+
 //        Launching Power Adjustment (Manual Offsetting)
 
         if (gamepad2.dpadDownWasPressed()) {
-            flyWheel.increaseRPM();
-        }
-        else if (gamepad2.dpadUpWasPressed()) {
             flyWheel.decreaseRPM();
-        }
-        else if (gamepad2.dpadLeftWasPressed() || gamepad2.dpadRightWasPressed()) {
+        } else if (gamepad2.dpadUpWasPressed()) {
+            flyWheel.increaseRPM();
+        } else if (gamepad2.dpadLeftWasPressed()) {
             flyWheel.resetRPM();
+        } else if (gamepad2.dpadRightWasPressed()) {
+            flyWheel.rpmOffset = 30;
         }
 
 //        Camera Apriltag Detection
