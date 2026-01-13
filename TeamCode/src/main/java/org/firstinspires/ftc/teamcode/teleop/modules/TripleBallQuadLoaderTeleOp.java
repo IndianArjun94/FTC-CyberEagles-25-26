@@ -12,7 +12,6 @@ public class TripleBallQuadLoaderTeleOp {
     private final CRServo backLeftLoadServo;
     private final CRServo backRightLoadServo;
     private final DcMotorEx topLoadMotor;
-    public boolean loaderActive = false;
 
     public TripleBallQuadLoaderTeleOp(HardwareMap hardwareMap) {
         this.frontLeftLoadServo = hardwareMap.get(CRServo.class, "frontLeftLoad");
@@ -31,7 +30,6 @@ public class TripleBallQuadLoaderTeleOp {
         backLeftLoadServo.setPower(1);
         backRightLoadServo.setPower(1);
         topLoadMotor.setPower(1);
-        loaderActive = true;
     }
 
     public void stop() {
@@ -40,7 +38,6 @@ public class TripleBallQuadLoaderTeleOp {
         backLeftLoadServo.setPower(0);
         backRightLoadServo.setPower(0);
         topLoadMotor.setPower(0);
-        loaderActive = false;
     }
 
     public void eject() {
@@ -49,6 +46,5 @@ public class TripleBallQuadLoaderTeleOp {
         backLeftLoadServo.setPower(-1);
         backRightLoadServo.setPower(-1);
         topLoadMotor.setPower(-1);
-        loaderActive = true;
     }
 }
