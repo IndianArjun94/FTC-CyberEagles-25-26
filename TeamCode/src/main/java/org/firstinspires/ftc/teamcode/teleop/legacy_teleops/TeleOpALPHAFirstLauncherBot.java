@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.module.AprilTagModule;
-import org.firstinspires.ftc.teamcode.module.ObeliskPattern;
+import org.firstinspires.ftc.teamcode.modules.AprilTagModule;
+import org.firstinspires.ftc.teamcode.modules.ObeliskPattern;
 
 @Disabled
 @TeleOp(name = "TeleOp Golden")

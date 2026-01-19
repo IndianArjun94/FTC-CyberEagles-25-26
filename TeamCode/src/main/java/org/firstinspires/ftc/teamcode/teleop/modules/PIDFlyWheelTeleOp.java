@@ -50,7 +50,6 @@ public class PIDFlyWheelTeleOp {
         telemetry.addData("dt: ", time - prevTime);
         telemetry.addData("vel (rpm): ", launcherMotor.getVelocity() * 60 / TICKS_PER_REVOLUTION);
 
-
         telemetry.update();
     }
 

@@ -12,8 +12,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class LifterTeleOp {
     private Servo lifterServo;
 
-    private final double UP_POSITION = 0.3; // straight up - used to be 0.15
-    private final double DOWN_POSITION = 0.55; // straight right
+    private final double UP_POSITION = 0.25; // straight up - used to be 0.15 old: 0.25
+    private final double DOWN_POSITION = 0.65; // straight right old: 0.55
     private Telemetry telemetry;
 
     public LifterTeleOp(HardwareMap hardwareMap, Telemetry telemetry) {
