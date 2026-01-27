@@ -62,6 +62,11 @@ public class TeleOpALPHAMeet3 extends OpMode {
         stopper = new StopperTeleOp(hardwareMap, telemetry);
         loader = new TripleBallQuadLoaderTeleOp(hardwareMap);
 
+        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // brake on 0 power
+        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
 
     //  Update Function that runs after every loop  //
@@ -101,7 +106,7 @@ public class TeleOpALPHAMeet3 extends OpMode {
         rightBackPower -= gamepad1_x;
 
 //        Intake
-        if (gamepad2.left_bumper && System.currentTimeMillis() - lastLeftBumperPress > 250) {
+        if (gamepad1.left_bumper && System.currentTimeMillis() - lastLeftBumperPress > 250) {
             if (intakeActive) {
                 intakeActive = false;
                 lastLeftBumperPress = System.currentTimeMillis();
@@ -168,12 +173,13 @@ public class TeleOpALPHAMeet3 extends OpMode {
                 }
 
                 loader.start();
+                intake.setPower(1); // intake addition
 
                 if ((launchingStage == 4 && shootOnce) || (launchingStage == 8 && shootTwice)) {
                     telemetry.addData("launchingStage: ", Integer.toString(launchingStage));
                     telemetry.addData("time diff:", Long.toString(System.currentTimeMillis() - previousLaunchingStageTime));
                     telemetry.update();
-                    if (System.currentTimeMillis() - previousLaunchingStageTime >= 1000) { // old 1500
+                    if (System.currentTimeMillis() - previousLaunchingStageTime >= 700) { // old 1000 - old 1500
                         stopper.close();
                         loader.stop();
                         launching = false;
@@ -185,6 +191,7 @@ public class TeleOpALPHAMeet3 extends OpMode {
                 }
             } else if ((launchingStage == 5 || launchingStage == 9) && System.currentTimeMillis() - previousLaunchingStageTime >= 400) { // old 1000
                 loader.stop();
+                intake.setPower(0); // intake addition
                 previousLaunchingStageTime = System.currentTimeMillis();
                 launchingStage++;
             } else if (launchingStage == 12 && System.currentTimeMillis() - previousLaunchingStageTime >= 50) { // old 200

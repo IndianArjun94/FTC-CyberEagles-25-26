@@ -43,19 +43,19 @@ public class CLOSERED_12 extends LinearOpMode {
         Vector2d goalVector = new Vector2d(-23.5, 17);
 
         Pose2d secondBallsHalfwayPos = new Pose2d(-11.5, 20, deg(90));
-        Pose2d secondBallsPos = new Pose2d(-11.5, 45, deg(90));
+        Pose2d secondBallsPos = new Pose2d(-11.5, 42.5, deg(90));
         Vector2d secondBallsVector = new Vector2d(-11.5, 45);
 
         Pose2d thirdBallsHalfwayPos = new Pose2d(11.5, 24, deg(90));
-        Pose2d thirdBallsPos = new Pose2d(11.5, 45, deg(90));
+        Pose2d thirdBallsPos = new Pose2d(11.5, 42.5, deg(90));
         Vector2d thirdBallsVector = new Vector2d(11.5, 45);
 
         Pose2d fourthBallsHalfwayPos = new Pose2d(35.5, 28, deg(90));
-        Pose2d fourthBallsPos = new Pose2d(35.5, 45, deg(90));
+        Pose2d fourthBallsPos = new Pose2d(35.5, 42.5, deg(90));
         Vector2d fourthBallsVector = new Vector2d(35.5, 45);
 
         MinVelConstraint slowVelConstraint = new MinVelConstraint(Arrays.asList(
-                new TranslationalVelConstraint(10), // 15 in. per sec cap
+                new TranslationalVelConstraint(15), // 15 in. per sec cap
                 new AngularVelConstraint(deg(220) // 180 deg per sec cap
                 )));
 
@@ -265,7 +265,7 @@ public class CLOSERED_12 extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(
-                new ParallelAction(launcher.revLauncher(155), fullAction)
+                new ParallelAction(launcher.revLauncher(170), fullAction)
         );
 
     }
