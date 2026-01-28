@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.auton.thirdbot.third_bot_modules.launcher.
 
 import java.util.Arrays;
 
-@Autonomous(name = "CLOSE BLUE :)")
+@Autonomous(name = "CLOSE BLUE")
 public class CLOSEBLUE_12 extends LinearOpMode {
 
     @Override
@@ -39,34 +39,29 @@ public class CLOSEBLUE_12 extends LinearOpMode {
         Stopper stopper = new Stopper(hardwareMap, telemetry);
         Lifter lifter = new Lifter(hardwareMap, telemetry);
 
-        Pose2d goalPos = new Pose2d(-23.5, -17, deg(227));
+        Pose2d goalPos = new Pose2d(-23.5, -17, deg(225)); // DO NOT INTERCHANGE BETWEEN RED/BLUE
         Vector2d goalVector = new Vector2d(-23.5, -17);
 
         Pose2d secondBallsHalfwayPos = new Pose2d(-11.5, -20, deg(270));
-        Pose2d secondBallsPos = new Pose2d(-11.5, -45, deg(270));
+        Pose2d secondBallsPos = new Pose2d(-11.5, -42.5, deg(270));
         Vector2d secondBallsVector = new Vector2d(-11.5, -45);
 
-        Pose2d thirdBallsHalfwayPos = new Pose2d(11.5, -24, deg(270));
-        Pose2d thirdBallsPos = new Pose2d(11.5, -45, deg(270));
+        Pose2d thirdBallsHalfwayPos = new Pose2d(11.5, -21, deg(270));
+        Pose2d thirdBallsPos = new Pose2d(11.5, -42.5, deg(270));
         Vector2d thirdBallsVector = new Vector2d(11.5, -45);
 
         Pose2d fourthBallsHalfwayPos = new Pose2d(35.5, -28, deg(270));
-        Pose2d fourthBallsPos = new Pose2d(35.5, -45, deg(270));
+        Pose2d fourthBallsPos = new Pose2d(35.5, -42.5, deg(270));
         Vector2d fourthBallsVector = new Vector2d(35.5, -45);
 
         MinVelConstraint slowVelConstraint = new MinVelConstraint(Arrays.asList(
-                new TranslationalVelConstraint(10), // 15 in. per sec cap
-                new AngularVelConstraint(deg(220) // 180 deg per sec cap
-                )));
-
-        MinVelConstraint mediumVelConstraint = new MinVelConstraint(Arrays.asList(
-                new TranslationalVelConstraint(22), // 15 in. per sec cap
+                new TranslationalVelConstraint(15), // 15 in. per sec cap
                 new AngularVelConstraint(deg(220) // 180 deg per sec cap
                 )));
 
         Action goToGoal1 = drive.actionBuilder(startingPos)
                 .setTangent(deg(45))
-                .strafeToLinearHeading(goalVector, deg(227))
+                .strafeToLinearHeading(goalVector, deg(225)) // DO NOT INTERCHANGE BETWEEN RED/BLUE
                 .build();
 
 //        Action goToGoal1 = drive.actionBuilder(startingPos)
@@ -74,7 +69,7 @@ public class CLOSEBLUE_12 extends LinearOpMode {
 //                .build();
 
         Action goToSecondBalls = drive.actionBuilder(goalPos)
-                .setTangent(deg(310))
+                .setTangent(deg(0))
                 .splineToSplineHeading(secondBallsHalfwayPos, deg(270), slowVelConstraint)
                 // Finish the rest of the distance at that fixed heading
                 .splineToConstantHeading(secondBallsVector, deg(270), slowVelConstraint)
@@ -113,35 +108,35 @@ public class CLOSEBLUE_12 extends LinearOpMode {
 
         Action scoreFirstBalls = new SequentialAction(
                 new ParallelAction(
-                    goToGoal1,
-                    stopper.open()
+                        goToGoal1,
+                        stopper.open()
                 ),
 
-                new SleepAction(2),
+                new SleepAction(1),
 
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(), // lower
                 loader.start(), // load ball
-                new SleepAction(1),
+                new SleepAction(0.4),
                 loader.stop(),
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(),
                 loader.start(),
-                new SleepAction(1),
+                new SleepAction(0.4),
                 loader.stop(),
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(),
                 stopper.initiate()
         );
 
         Action getSecondBalls = new SequentialAction(
                 new ParallelAction(
-                    intake.start(),
-                    loader.start(),
-                    goToSecondBalls
+                        intake.start(),
+                        loader.start(),
+                        goToSecondBalls
                 ),
 
                 intake.stop()
@@ -157,20 +152,22 @@ public class CLOSEBLUE_12 extends LinearOpMode {
                         )
                 ),
 
+                new SleepAction(0.3),
+
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(), // lower
                 loader.start(), // load ball
-                new SleepAction(1),
+                new SleepAction(0.4),
                 loader.stop(),
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(),
                 loader.start(),
-                new SleepAction(1),
+                new SleepAction(0.4),
                 loader.stop(),
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(),
                 stopper.initiate()
         );
@@ -195,20 +192,22 @@ public class CLOSEBLUE_12 extends LinearOpMode {
                         )
                 ),
 
+                new SleepAction(0.3),
+
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(), // lower
                 loader.start(), // load ball
-                new SleepAction(1),
+                new SleepAction(0.4),
                 loader.stop(),
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(),
                 loader.start(),
-                new SleepAction(1),
+                new SleepAction(0.4),
                 loader.stop(),
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(),
                 stopper.initiate()
         );
@@ -233,20 +232,22 @@ public class CLOSEBLUE_12 extends LinearOpMode {
                         )
                 ),
 
+                new SleepAction(0.3),
+
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(), // lower
                 loader.start(), // load ball
-                new SleepAction(1),
+                new SleepAction(0.4),
                 loader.stop(),
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(),
                 loader.start(),
-                new SleepAction(1),
+                new SleepAction(0.4),
                 loader.stop(),
                 lifter.lift(), // shoot
-                new SleepAction(0.4),
+                new SleepAction(0.25),
                 lifter.reset(),
                 stopper.initiate()
         );
@@ -265,7 +266,7 @@ public class CLOSEBLUE_12 extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(
-                new ParallelAction(launcher.revLauncher(155), fullAction)
+                new ParallelAction(launcher.revLauncher(165), fullAction)
         );
 
     }
